@@ -5,21 +5,31 @@ from key import OPENAI_API_KEY
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-def init_boardgame(number_of_players, game_duration, description_of_background, game_categories, game_mechanics):
-    system_context_init = '''
+def init_boardgame(number_of_players, game_duration, description_of_background, game_category, game_mechanics):
+    with open('rule_template_category.json') as json_data:
+        rule_template_categories = json.load(json_data)
+    category_features = json.dumps(rule_template_categories[game_category])
+
+    with open('rule_template_mechanics.json') as json_data:
+        rule_template_mechanics = json.load(json_data)
+    filtered_mechanics = {}
+    for game_mechanic in game_mechanics:
+        filtered_mechanics[game_mechanic] = rule_template_mechanics[game_mechanic]
+    game_mechanics_requirements = json.dumps(filtered_mechanics)
+
+    system_context_init = f'''
     You are co-creativity assistant to help design a board game.
+    
+    The category of this game is: {game_category}. Fearures of this category of game are: {category_features}.
+    
+    The mechanics of this game are: {game_mechanics}. Elements and requirements for each mechanic are: {game_mechanics_requirements}.
 
     You will be provided with some settings: 
     1. number of players
     2. game duration
     3. description of background
-    4. game categories
-    5. game mechanics
-    categories and mechanics can be combination of:
-    All Categories: ['abstract_strategy', 'adventure', 'age_of_reason', 'american_west', 'ancient', 'animals', 'bluffing', 'card_game', 'city_building', 'civilization', 'deduction', 'dice', 'economic', 'educational', 'environmental', 'exploration', 'fantasy', 'farming', 'fighting', 'humor', 'industry_/_manufacturing', 'medical', 'medieval', 'miniatures', 'modern_warfare', 'mythology', 'nautical', 'negotiation', 'novel-based', 'number', 'party_game', 'political', 'post-napoleonic', 'puzzle', 'religious', 'renaissance', 'science_fiction', 'space_exploration', 'spies_/_secret_agents', 'territory_building', 'trains', 'transportation', 'travel', 'wargame', 'word_game']
-    All Mechanics: ['action_/_event', 'action_drafting', 'action_points', 'action_queue', 'action_retrieval', 'advantage_token', 'area_majority_/_influence', 'area_movement', 'auction:_dutch', 'auction_/_bidding', 'automatic_resource_growth', 'campaign_/_battle_card_driven', 'card_play_conflict_resolution', 'catch_the_leader', 'chaining', 'closed_drafting', 'communication_limits', 'contracts', 'cooperative_game', 'deck,_bag,_and_pool_building', 'deduction', 'delayed_purchase', 'dice_rolling', 'enclosure', 'end_game_bonuses', 'events', 'finale_ending', 'follow', 'force_commitment', 'grid_coverage', 'grid_movement', 'hand_management', 'hexagon_grid', 'hidden_roles', 'hidden_victory_points', 'income', 'increase_value_of_unchosen_resources', 'investment', 'kill_steal', 'king_of_the_hill', 'layering', 'legacy_game', 'loans', 'map_addition', 'market', 'modular_board', 'movement_points', 'multi-use_cards', 'narrative_choice_/_paragraph', 'negotiation', 'network_and_route_building', 'once-per-game_abilities', 'open_drafting', 'ownership', 'paper-and-pencil', 'pattern_building', 'player_elimination', 'point_to_point_movement', 'push_your_luck', 'race', 'random_production', 'resource_to_move', 'roles_with_asymmetric_information', 'rondel', 'scenario_/_mission_/_campaign_game', 'score-and-reset_game', 'set_collection', 'simulation', 'simultaneous_action_selection', 'solo_/_solitaire_game', 'square_grid', 'storytelling', 'sudden_death_ending', 'tags', 'take_that', 'targeted_clues', 'team-based_game', 'tech_trees_/_tech_tracks', 'tile_placement', 'track_movement', 'trading', 'traitor_game', 'trick-taking', 'tug_of_war', 'turn_order:_claim_action', 'turn_order:_pass_order', 'turn_order:_progressive', 'turn_order:_stat-based', 'turn_order:_time_track', 'variable_phase_order', 'variable_player_powers', 'variable_set-up', 'victory_points_as_a_resource', 'voting', 'worker_placement', 'worker_placement,_different_worker_types', 'zone_of_control']
 
-    Based on these settings, generate a background story and detailed game rules.
+    Based on these settings, generate a background story and detailed game rules. Category and mechanics must follow the requirement so that player can play the game directly according to the rules.
 
     Provide your output in json format with the keys:
     1. name
@@ -27,6 +37,7 @@ def init_boardgame(number_of_players, game_duration, description_of_background, 
     3. rules
     4. players
     '''
+    print(f"*** system_context_init: \n {system_context_init}")
 
     assistant_context_init = '''
     1. name: 
@@ -45,11 +56,10 @@ def init_boardgame(number_of_players, game_duration, description_of_background, 
     user_context_init_json = {
         "number_of_players": number_of_players,
         "game_duration": game_duration,
-        "description_of_background": description_of_background,
-        "game_categories": game_categories,
-        "game_mechanics": game_mechanics
+        "description_of_background": description_of_background
     }
     user_context_init = json.dumps(user_context_init_json)
+    print(f"*** user_context_init: \n {user_context_init}")
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
@@ -68,8 +78,7 @@ def init_boardgame(number_of_players, game_duration, description_of_background, 
             }
         ]
     )
-    # print(completion.choices[0].message)
-    print(completion.choices[0].message.content)
+    print(f"*** response: \n {completion.choices[0].message.content}")
     response_content = completion.choices[0].message.content
 
     file_path = "return/board_game_theme_fantacy.md"
@@ -107,8 +116,8 @@ def follow_up(init_content):
                 "number_of_players": 4,
                 "game_duration": "1-2 hours",
                 "description_of_background": "adventure happens on a mysterious island",
-                "game_categories": ["adventure", "fantasy", "fighting"],
-                "game_mechanics": ["catch_the_leader", "hand_management", "hidden_roles"]
+                "game_category": ["adventure"],
+                "game_mechanics": ["Action and Turn Management", "Dice and Randomness", "Player Interaction"]
             })
         },
         {
@@ -146,9 +155,9 @@ if __name__ == "__main__":
     number_of_players = 4
     game_duration = "1-2 hours"
     description_of_background = "adventure happen on a mysterious island"
-    game_categories = ["adventure", "fantasy", "fighting"]
-    game_mechanics = ["catch_the_leader", "hand_management", "hidden_roles"]
+    game_category = "adventure"
+    game_mechanics = ["Action and Turn Management", "Dice and Randomness", "Player Interaction"]
 
-    init_content = init_boardgame(number_of_players, game_duration, description_of_background, game_categories, game_mechanics)
-    follow_up(init_content)
+    init_content = init_boardgame(number_of_players, game_duration, description_of_background, game_category, game_mechanics)
+    # follow_up(init_content)
 

@@ -1,49 +1,62 @@
 ```json
 {
-  "background": "In the heart of the Forgotten Seas lies a mysterious island, shrouded in fog and legends of ancient treasures. Adventurers from across the realms gather at the shores, lured by tales of enchanted relics said to grant unimaginable power. However, the island harbors dark secrets and hidden dangers. The explorers must navigate through treacherous landscapes, fend off fierce creatures, and outsmart each other as they embark on perilous quests. But beware! Among the adventurers, there are those with secret agendas – traitors who seek to sabotage their efforts for their own gain. Only through cunning strategy and teamwork can the true treasure be unearthed. Will you survive the island’s trials and emerge as the champion of legends or will you fall victim to the shadows lurking within?",
+  "name": "Mysteries of the Lost Island",
+  "background": "In the depths of the ocean lies a forgotten island shrouded in mystery and legend. Rumors tell of ancient civilizations, lost treasures, and powerful artifacts hidden within its dense jungles and treacherous cliffs. As brave adventurers, players embark on a quest to explore the island, uncover its secrets, and face the challenges that await. Each player assumes the role of a unique character, equipped with distinctive skills and abilities, determined to survive the dangers of the island while competing against each other to claim glory and wealth. Will you work together to overcome the challenges, or will you manipulate, negotiate, and betray your fellow adventurers to fulfill your personal objectives?",
   "rules": {
-    "setup": {
-      "players": "Each player selects a character with unique abilities.",
-      "island_map": "Create the island map with unexplored areas and point of interest markers.",
-      "treasure_tokens": "Place treasure tokens randomly across the map.",
-      "role_card": "Shuffle the hidden role cards and distribute one to each player face down."
+    "Setup": {
+      "1": "Place the island board in the center of the playing area.",
+      "2": "Each player selects a character and takes the corresponding character card and tokens.",
+      "3": "Shuffle the quest deck and place it face down on the board.",
+      "4": "Distribute action points: each player starts with 5 action points.",
+      "5": "Place a dice tray and a set of dice within reach of all players."
     },
-    "turn_structure": {
-      "action_phase": {
-        "each_turn": {
-          "players": "Take turns in clockwise order.",
-          "actions": [
-            "Move: Players may move to an adjacent area.",
-            "Explore: Players can explore their current location for treasure or encounter events.",
-            "Fight: Engage in combat with creatures or other players.",
-            "Strategize: Use hand management to execute special abilities."
-          ]
-        }
-      },
-      "reveal_phase": {
-        "end_of_turn": "Players can choose to reveal or hide their roles, creaing tension and strategy."
-      }
+    "Game Turn": {
+      "1": "Players take turns in clockwise order.",
+      "2": "On their turn, players spend action points to perform actions (moving, exploring, questing, or interacting).",
+      "3": "Players may negotiate alliances or trade items with each other during their turn.",
+      "4": "After performing actions, players may roll dice for outcomes, using the results for quests or resolving conflicts."
     },
-    "victory_conditions": {
-      "treasure_collection": "The first player to collect a set amount of treasure tokens is declared the winner.",
-      "elimination": "Alternatively, players can win by eliminating all other adventurers."
+    "Action Points": {
+      "1": "Players have 5 action points per turn.",
+      "2": "Actions include: Move (1 point), Explore (2 points), Complete Quest (3 points), Trade with another player (1 point).",
+      "3": "Unused action points cannot be carried over to the next turn."
     },
-    "hidden_roles": {
-      "sabotage": "Traitors have special abilities that allow them to hinder other players' progress.",
-      "victory_for_traitors": "If all loyal adventurers are eliminated, the traitors win."
+    "Quests": {
+      "1": "Players draw quest cards when exploring certain locations or fulfilling specific requirements.",
+      "2": "Each quest card outlines challenges that may require dice rolls to complete.",
+      "3": "Successfully completing quests provides rewards such as equipment upgrades or special abilities."
+    },
+    "Dice Rolling": {
+      "1": "Players roll a six-sided die to determine outcomes for combat, exploration, or quests.",
+      "2": "For each action requiring a die roll, the player assigns the appropriate action modifier or reroll if applicable."
+    },
+    "Player Interaction": {
+      "1": "Players have hidden objectives that define their goals within the game.",
+      "2": "Mechanics for revealing hidden objectives can occur at any point after a player completes two quests.",
+      "3": "Players may form temporary alliances but these alliances can be broken at any time through negotiation."
+    },
+    "Endgame": {
+      "1": "The game ends when a predetermined number of quests have been completed or a specific story event is triggered.",
+      "2": "Players reveal their hidden objectives, and the one with the most points from completed quests and hidden objectives wins."
     }
   },
-  "players": {
-    "player_characters": [
-      "Warrior: Strong in battle, excels at combat tasks.",
-      "Rogue: Quick and stealthy, can sneak past enemies or players.",
-      "Mage: Uses magic for powerful spells, useful in combat and exploration.",
-      "Ranger: Expert tracker, can identify creature weaknesses and gain advantages."
-    ],
-    "player_roles": [
-      "Loyal Adventurer: Work to collect treasure and aid allies.",
-      "Traitor: Deceive and sabotage the adventurers while appearing innocent."
-    ]
-  }
+  "players": [
+    {
+      "name": "The Scout",
+      "ability": "Move an additional space when exploring."
+    },
+    {
+      "name": "The Inventor",
+      "ability": "Can upgrade equipment by collecting resources during exploration."
+    },
+    {
+      "name": "The Diplomat",
+      "ability": "May swap one item with another player during negotiations."
+    },
+    {
+      "name": "The Warrior",
+      "ability": "Gets a +1 bonus on combat rolls."
+    }
+  ]
 }
 ```
