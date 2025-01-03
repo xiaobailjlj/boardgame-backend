@@ -5,7 +5,7 @@ from key import OPENAI_API_KEY
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-def init_boardgame():
+def init_boardgame(number_of_players, game_duration, description_of_background, game_categories, game_mechanics):
     system_context_init = '''
     You are co-creativity assistant to help design a board game.
 
@@ -43,11 +43,11 @@ def init_boardgame():
     '''
 
     user_context_init_json = {
-        "number_of_players": 4,
-        "game_duration": "1-2 hours",
-        "description_of_background": "adventure happen on a mysterious island",
-        "game_categories": ["adventure", "fantasy", "fighting"],
-        "game_mechanics": ["catch_the_leader", "hand_management", "hidden_roles"]
+        "number_of_players": number_of_players,
+        "game_duration": game_duration,
+        "description_of_background": description_of_background,
+        "game_categories": game_categories,
+        "game_mechanics": game_mechanics
     }
     user_context_init = json.dumps(user_context_init_json)
 
@@ -143,6 +143,12 @@ def follow_up(init_content):
 
 
 if __name__ == "__main__":
-    init_content = init_boardgame()
+    number_of_players = 4
+    game_duration = "1-2 hours"
+    description_of_background = "adventure happen on a mysterious island"
+    game_categories = ["adventure", "fantasy", "fighting"]
+    game_mechanics = ["catch_the_leader", "hand_management", "hidden_roles"]
+
+    init_content = init_boardgame(number_of_players, game_duration, description_of_background, game_categories, game_mechanics)
     follow_up(init_content)
 
