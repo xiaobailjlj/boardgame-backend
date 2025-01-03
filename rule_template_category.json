@@ -1,0 +1,94 @@
+{
+  "categories": [
+    {
+      "type": "Strategy-Based Categories",
+      "subcategories": [
+        {
+          "name": "Territory Building",
+          "features": [
+            "Players claim or develop areas.",
+            "Interaction between players often revolves around resources or dominance."
+          ],
+          "examples": ["Risk", "Carcassonne"]
+        },
+        {
+          "name": "Civilization",
+          "features": [
+            "Develop infrastructure, population, and economy.",
+            "May include a technology tree or cultural development."
+          ],
+          "examples": ["SimCity (board version)", "Civilization"]
+        }
+      ]
+    },
+    {
+      "type": "Adventure and Exploration",
+      "subcategories": [
+        {
+          "name": "Adventure",
+          "features": [
+            "Narrative-driven with quests and challenges.",
+            "Includes character development and equipment upgrades."
+          ],
+          "examples": ["Gloomhaven", "Talisman"]
+        },
+        {
+          "name": "Exploration",
+          "features": [
+            "Discover new areas or resources.",
+            "Often includes a modular board or map."
+          ],
+          "examples": ["Robinson Crusoe", "Scythe"]
+        },
+        {
+          "name": "Fantasy",
+          "features": [
+            "Incorporates magic, mythical creatures, or supernatural elements.",
+            "Heavy thematic design and often features narrative depth."
+          ],
+          "examples": ["Dungeons & Dragons", "Mage Knight"]
+        }
+      ]
+    },
+    {
+      "type": "Resource Management",
+      "subcategories": [
+        {
+          "name": "Economic",
+          "features": [
+            "Focus on trade, market dynamics, and financial growth."
+          ],
+          "examples": ["Power Grid", "Brass"]
+        },
+        {
+          "name": "Farming / Industry / Manufacturing",
+          "features": [
+            "Players grow, produce, or refine resources.",
+            "Often tied to worker placement or production chains."
+          ],
+          "examples": ["Agricola", "Caverna"]
+        }
+      ]
+    },
+    {
+      "type": "Conflict and Interaction",
+      "subcategories": [
+        {
+          "name": "Fighting",
+          "features": [
+            "Direct combat between players or against NPC enemies.",
+            "Often uses dice rolls or tactical grids."
+          ],
+          "examples": ["HeroQuest", "Warhammer"]
+        },
+        {
+          "name": "Bluffing",
+          "features": [
+            "Players attempt to deceive others or guess hidden information."
+          ],
+          "examples": ["Coup", "Werewolf"]
+        }
+      ]
+    }
+  ]
+}
