@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Play</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        .player-container {
+            position: relative;
+            width: 80%;
+            height: 50vh;
+            background: url('mappractice3.jpg') no-repeat center center;
+            background-size: cover;
+            border: 5px solid #fff;
+            border-radius: 10px;
+        }
+
+        .player {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.6);
+            position: absolute;
+        }
+
+        .center {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .dice-section {
+            text-align: center;
+        }
+
+        .dice-button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .dice-button:hover {
+            background-color: #0056b3;
+        }
+
+        .input-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        input {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container" id="player-container">
+        <!-- Players will be dynamically generated -->
+    </div>
+
+    <div class="center">
+        <h1>Game Play</h1>
+        <p>Take your turn by rolling the dice!</p>
+    </div>
+
+    <div class="dice-section">
+        <button class="dice-button" id="roll-dice">Roll Dice</button>
+        <p id="dice-result">Roll to start!</p>
+    </div>
+
+    <div class="input-section">
+        <input type="text" id="user-action" placeholder="Enter your action...">
+        <button class="dice-button" id="submit-action">Submit Action</button>
+        <p id="response" style="margin-top: 20px; font-size: 16px;"></p>
+    </div>
+
+    <script>
+        const playersCount = 4; // This can be dynamically set
+
+        const playerPositions = {
+            2: [
+                { class: 'you', x: '50%', y: '70%' },
+                { class: 'ai1', x: '50%', y: '30%' }
+            ],
+            3: [
+                { class: 'you', x: '50%', y: '70%' },
+                { class: 'ai1', x: '20%', y: '30%' },
+                { class: 'ai2', x: '80%', y: '30%' }
+            ],
+            4: [
+                { class: 'you', x: '50%', y: '70%' },
+                { class: 'ai1', x: '20%', y: '50%' },
+                { class: 'ai2', x: '80%', y: '50%' },
+                { class: 'ai3', x: '50%', y: '30%' }
+            ]
+        };
+
+        const container = document.getElementById('player-container');
+        container.innerHTML = '';
+
+        playerPositions[playersCount].forEach(pos => {
+            const player = document.createElement('div');
+            player.className = `player ${pos.class}`;
+            player.style.left = pos.x;
+            player.style.top = pos.y;
+            player.textContent = pos.class === 'you' ? 'You' : pos.class.replace('ai', 'AI Player ');
+            container.appendChild(player);
+        });
+
+        document.getElementById('roll-dice').addEventListener('click', function() {
+            const diceRoll = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('dice-result').innerText = `You rolled a ${diceRoll}!`;
+        });
+
+        document.getElementById('submit-action').addEventListener('click', function() {
+            const action = document.getElementById('user-action').value;
+
+            if (!action.trim()) {
+                alert('Please enter an action.');
+                return;
+            }
+
+            fetch('/api/game-action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').innerText = data.message || 'Action submitted successfully!';
+            })
+            .catch(err => {
+                console.error(err);
+                document.getElementById('response').innerText = 'An error occurred. Please try again.';
+            });
+        });
+    </script>
+</body>
+</html>
