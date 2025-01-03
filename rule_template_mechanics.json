@@ -1,101 +1,126 @@
 {
-  "mechanics": [
+  "Action and Turn Management": [
     {
-      "category": "Action and Turn Management",
-      "elements": [
-        {
-          "name": "Action Points",
-          "description": "Players have a limited number of points to perform actions each turn.",
-          "examples": ["Pandemic", "Tikal"]
-        },
-        {
-          "name": "Simultaneous Action Selection",
-          "description": "Players secretly select and reveal actions at the same time.",
-          "examples": ["7 Wonders", "Diplomacy"]
-        }
-      ]
+      "name": "Action Points",
+      "description": "Players have a limited number of points to perform actions each turn.",
+      "requirements": [
+        "Define the number of action points per turn.",
+        "Specify actions and their costs in points.",
+        "Rules for unused action points (carryover or loss)."
+      ],
+      "examples": ["Pandemic", "Tikal"]
     },
     {
-      "category": "Card Play",
-      "elements": [
-        {
-          "name": "Card Play / Deck Building",
-          "description": "Cards represent resources, actions, or events. Players build a deck over time and draw cards to execute strategies.",
-          "requirements": [
-            "Define card types (action, item, etc.).",
-            "Rules for deck composition and usage."
-          ],
-          "examples": ["Dominion", "Magic: The Gathering"]
-        },
-        {
-          "name": "Hand Management",
-          "description": "Players manage a limited number of cards to maximize efficiency.",
-          "examples": ["Ticket to Ride", "Jaipur"]
-        }
-      ]
+      "name": "Simultaneous Action Selection",
+      "description": "Players secretly select and reveal actions at the same time.",
+      "requirements": [
+        "Provide a method for secret selection (e.g., cards, tokens).",
+        "Define rules for resolving conflicts if actions overlap.",
+        "Specify timing or sequencing rules for revealed actions."
+      ],
+      "examples": ["7 Wonders", "Diplomacy"]
+    }
+  ],
+  "Card Play": [
+    {
+      "name": "Card Play / Deck Building",
+      "description": "Cards represent resources, actions, or events. Players build a deck over time and draw cards to execute strategies.",
+      "requirements": [
+        "Define card types (action, item, etc.).",
+        "Rules for deck composition and usage.",
+        "Mechanics for card acquisition and discard.",
+        "Define maximum hand size and draw mechanics."
+      ],
+      "examples": ["Dominion", "Magic: The Gathering"]
     },
     {
-      "category": "Dice and Randomness",
-      "elements": [
-        {
-          "name": "Dice Rolling",
-          "description": "Used for movement, combat, or random events.",
-          "requirements": [
-            "Define outcomes for each face of the dice.",
-            "Balance between randomness and player agency."
-          ],
-          "examples": ["Risk", "Catan"]
-        }
-      ]
+      "name": "Hand Management",
+      "description": "Players manage a limited number of cards to maximize efficiency.",
+      "requirements": [
+        "Define maximum hand size.",
+        "Specify how cards are drawn and discarded.",
+        "Establish rules for card effects and timing of play."
+      ],
+      "examples": ["Ticket to Ride", "Jaipur"]
+    }
+  ],
+  "Dice and Randomness": [
+    {
+      "name": "Dice Rolling",
+      "description": "Used for movement, combat, or random events.",
+      "requirements": [
+        "Define outcomes for each face of the dice.",
+        "Provide rules for interpreting dice results.",
+        "Balance between randomness and player agency.",
+        "Specify modifiers or reroll mechanics (if any)."
+      ],
+      "examples": ["Risk", "Catan"]
+    }
+  ],
+  "Player Interaction": [
+    {
+      "name": "Hidden Roles",
+      "description": "Players have secret objectives or affiliations.",
+      "requirements": [
+        "Role distribution and victory conditions for each role.",
+        "Mechanics for revealing or deducing roles.",
+        "Rules for handling secret information and actions."
+      ],
+      "examples": ["Werewolf", "Secret Hitler"]
     },
     {
-      "category": "Player Interaction",
-      "elements": [
-        {
-          "name": "Hidden Roles",
-          "description": "Players have secret objectives or affiliations.",
-          "requirements": [
-            "Role distribution and victory conditions for each role.",
-            "Mechanics for revealing or deducing roles."
-          ],
-          "examples": ["Werewolf", "Secret Hitler"]
-        },
-        {
-          "name": "Negotiation",
-          "description": "Players form temporary alliances or trade resources.",
-          "examples": ["Cosmic Encounter", "Diplomacy"]
-        }
-      ]
+      "name": "Negotiation",
+      "description": "Players form temporary alliances or trade resources.",
+      "requirements": [
+        "Define the scope of allowed negotiation (e.g., resources, alliances).",
+        "Rules for breaking alliances or renegotiation.",
+        "Provide a mechanism for formalizing agreements if needed."
+      ],
+      "examples": ["Cosmic Encounter", "Diplomacy"]
+    }
+  ],
+  "Progression and Development": [
+    {
+      "name": "Tech Trees / Tracks",
+      "description": "Players unlock abilities or upgrades over time.",
+      "requirements": [
+        "Define a clear progression path or tree.",
+        "Specify costs or requirements for each upgrade.",
+        "Rules for simultaneous upgrades by multiple players."
+      ],
+      "examples": ["Eclipse", "Through the Ages"]
     },
     {
-      "category": "Progression and Development",
-      "elements": [
-        {
-          "name": "Tech Trees / Tracks",
-          "description": "Players unlock abilities or upgrades over time.",
-          "examples": ["Eclipse", "Through the Ages"]
-        },
-        {
-          "name": "Legacy Mechanics",
-          "description": "Persistent changes to the game state between sessions.",
-          "examples": ["Pandemic Legacy", "Risk Legacy"]
-        }
-      ]
+      "name": "Legacy Mechanics",
+      "description": "Persistent changes to the game state between sessions.",
+      "requirements": [
+        "Define mechanics for tracking game state changes.",
+        "Provide components to record persistent effects (e.g., stickers, cards).",
+        "Rules for integrating legacy mechanics into gameplay."
+      ],
+      "examples": ["Pandemic Legacy", "Risk Legacy"]
+    }
+  ],
+  "Resource and Area Management": [
+    {
+      "name": "Worker Placement",
+      "description": "Assign workers to tasks or areas for resources.",
+      "requirements": [
+        "Define areas or tasks available for placement.",
+        "Rules for resource allocation based on worker placement.",
+        "Specify limits on worker placement per area."
+      ],
+      "examples": ["Agricola", "Stone Age"]
     },
     {
-      "category": "Resource and Area Management",
-      "elements": [
-        {
-          "name": "Worker Placement",
-          "description": "Assign workers to tasks or areas for resources.",
-          "examples": ["Agricola", "Stone Age"]
-        },
-        {
-          "name": "Area Control / Majority",
-          "description": "Compete for dominance in specific regions.",
-          "examples": ["El Grande", "Small World"]
-        }
-      ]
+      "name": "Area Control / Majority",
+      "description": "Compete for dominance in specific regions.",
+      "requirements": [
+        "Define regions and their control conditions.",
+        "Rules for resolving ties in dominance.",
+        "Mechanics for gaining or losing control of regions."
+      ],
+      "examples": ["El Grande", "Small World"]
     }
   ]
 }
