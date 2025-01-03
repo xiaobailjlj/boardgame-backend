@@ -103,22 +103,43 @@ game_ids = {
     256043   # Terraforming Mars: Prelude
 }
 
-game_details = []
-for id in game_ids:# Replace with a valid game ID (e.g., 13 for Catan)
-    details = fetch_game_details(id)
-    if details:
-        game_detail = {
-            "id": id,
-            "title": details["title"],
-            "description": details["description"],
-            "players": details["players"],
-            "playing_time": details["playing_time"],
-            "age": details["age"],
-            "weight": details["weight"],
-            "categories": details["categories"],
-            "mechanics": details["mechanics"],
-        }
-        game_details.append(game_detail)
+def dump_json():
+    game_details = []
+    for id in game_ids:  # Replace with a valid game ID (e.g., 13 for Catan)
+        details = fetch_game_details(id)
+        if details:
+            game_detail = {
+                "id": id,
+                "title": details["title"],
+                "description": details["description"],
+                "players": details["players"],
+                "playing_time": details["playing_time"],
+                "age": details["age"],
+                "weight": details["weight"],
+                "categories": details["categories"],
+                "mechanics": details["mechanics"],
+            }
+            game_details.append(game_detail)
 
-with open(f"game_geek.json", "w", encoding="utf-8") as json_file:
-    json.dump(game_details, json_file, ensure_ascii=False, indent=4)
+    with open(f"game_geek.json", "w", encoding="utf-8") as json_file:
+        json.dump(game_details, json_file, ensure_ascii=False, indent=4)
+
+def normalize(text):
+    return text.lower().replace(" ", "_")
+
+def collect_game_details():
+    all_categories = set()
+    all_mechanics = set()
+
+    for id in game_ids:
+        details = fetch_game_details(id)
+        if details:
+            normalized_categories = [normalize(cat) for cat in details["categories"]]
+            normalized_mechanics = [normalize(mech) for mech in details["mechanics"]]
+            all_categories.update(normalized_categories)
+            all_mechanics.update(normalized_mechanics)
+
+    print("All Categories:", sorted(all_categories))
+    print("All Mechanics:", sorted(all_mechanics))
+
+collect_game_details()
