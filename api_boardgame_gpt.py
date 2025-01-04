@@ -33,7 +33,7 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
 
     Based on these settings, generate a background story and detailed game rules. Category and mechanics must follow the requirement so that player can play the game directly according to the rules.
 
-    Provide your output in json format with the keys:
+    Provide your output in json format with the keys, all keys in the json should be lowercase:
     1. name
     2. background
     3. rules
@@ -116,7 +116,7 @@ def follow_up(rule_id, file_path_follow, follow_instructions):
     The initial game is:
     {json.dumps(init_content)}
 
-    Combine the initial game and the details, provide your output in json format with the keys:
+    Combine the initial game and the details, provide your output in json format with the keys, all keys in the json should be lowercase:
     1. name
     2. background
     3. rules
@@ -190,7 +190,7 @@ def start_game(rule_id, file_path_rule, player_role):
     The game is:
     {json.dumps(game_context)}
 
-    Provide your output in json format with the keys:
+    Provide your output in json format with the keys, all keys in the json should be lowercase:
     1. name
     2. player_role
     3. history (now it's empty)
@@ -297,7 +297,7 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     The game history is:
     {json.dumps(game_history)}
 
-    Provide your output in json format with the keys:
+    Provide your output in json format with the keys, all keys in the json should be lowercase:
     1. name
     2. player_role
     3. history, for instance: {history_example}
