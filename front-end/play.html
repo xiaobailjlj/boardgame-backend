@@ -443,6 +443,7 @@
             const urlPrefix = 'http://localhost:5000';
             const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
             let selectedCharacter = null;
+            let roundNumber = 1;
 
             const rulesEditSection = document.getElementById('rules-edit');
             const startButton = document.getElementById('start-game');
@@ -671,8 +672,52 @@
                     actionButton.className = 'dice-button';
                     actionButton.textContent = action[0];
                     actionButton.addEventListener('click', () => {
-                        console.log(`Action chosen: ${action.value[0]}`);
-                        // Add your action handling logic here
+                        console.log(`Action chosen: ${action[0]}`);
+                        addLogEntry(`User chose to ${action[1]}`, 'my-player');
+                        fetch(`${urlPrefix}/api/v1/gameplay/round`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                rule_id: data.rule_id,
+                                player_role: selectedCharacter.name,
+                                round_id: roundNumber, // Example round number, you can update this dynamically
+                                action: 'User chose to ' + action[0]
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(roundData => {
+                            console.log('Round data:', roundData);
+                            const actionSection = document.getElementById('action-section');
+                            actionSection.innerHTML = ''; // Clear existing actions
+                            const numberedActions = Object.entries(roundData.next_action).filter(([key, value]) => /^choice[_ ]\d+$/.test(key));
+                            addActions(numberedActions); // Add new actions
+                            if (roundData.history && roundData.history[roundNumber - 1]) {
+                                function extractDescriptions(obj) {
+                                    let descriptions = [];
+                                    for (const key in obj) {
+                                        if (obj[key] && typeof obj[key] === 'object') {
+                                            descriptions = descriptions.concat(extractDescriptions(obj[key]));
+                                        } else if (key === 'description') {
+                                            descriptions.push(obj[key]);
+                                        }
+                                    }
+                                    return descriptions;
+                                }
+
+                                const descriptions = extractDescriptions(roundData.history[roundNumber - 1]);
+                                descriptions.forEach(description => {
+                                    addLogEntry(description, 'system');
+                                });
+                            }
+                            addLogEntry(`Round ${roundNumber} completed`, 'system');
+                            console.log('Round number:', roundNumber);
+                            roundNumber++;
+                        })
+                        .catch(err => {
+                            console.error('Error during round:', err);
+                        });
                     });
 
                     actionDiv.appendChild(actionText);
@@ -710,7 +755,7 @@
                     .then(startData => {
                         console.log('Game started:', startData);
                         const numberedActions = Object.entries(startData.next_action).filter(([key, value]) => /^choice[_ ]\d+$/.test(key));
-                        document.getElementById('dynamic-title').textContent = 'Your Turn';
+                        document.getElementById('dynamic-title').textContent = `You are ${selectedCharacter.name}`;
                         document.getElementById('dynamic-message').textContent = startData.next_action.choose + '🎲';
                         addActions(numberedActions);
                         addLogEntry('Game started', 'system');
