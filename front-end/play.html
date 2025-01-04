@@ -508,7 +508,7 @@
                 return card;
             }
 
-            (data.players.roles || data.players.Roles).forEach(character => {
+            (data.players.roles || data.players.Roles|| data.players.character_roles).forEach(character => {
                 const card = createCharacterCard(character);
                 characterGrid.appendChild(card);
             });
@@ -594,7 +594,7 @@
 
             // Modified game initialization
             function initializeGame(characterType) {
-                const playersCount = data.number_of_players;
+                const playersCount = data.players.number_of_players;
                 const container = document.getElementById('player-container');
                 container.innerHTML = '';
 

@@ -77,9 +77,8 @@
         <h2>Game Selector</h2>
         <form id="game-form">
             <div class="form-group">
-                <label for="min-players">Number of Players (Min - Max):</label>
-                <input type="number" id="min-players" placeholder="Min Players" required>
-                <input type="number" id="max-players" placeholder="Max Players" required>
+                <label for="players">Number of Players:</label>
+                <input type="number" id="players" placeholder="Players" required>
             </div>
             <div class="form-group">
                 <label for="time">Play Time (minutes):</label>
@@ -121,14 +120,13 @@
 
             const urlPrefix = 'http://localhost:5000';
 
-            const minPlayers = document.getElementById('min-players').value;
-            const maxPlayers = document.getElementById('max-players').value;
+            const minPlayers = document.getElementById('players').value;
             const time = document.getElementById('time').value;
             const type = document.getElementById('type').value;
             const backgroundDescription = document.getElementById('background-description').value;
             const mechanics = Array.from(document.querySelectorAll('.mechanic-option.selected')).map(button => button.dataset.value);
 
-            if (!minPlayers || !maxPlayers || !time || !type || !mechanics || !backgroundDescription) {
+            if (!minPlayers || !time || !type || !mechanics || !backgroundDescription) {
                 alert('Please fill out all fields.');
                 return;
             }
