@@ -113,81 +113,83 @@ def optimize_rules():
         return jsonify({'error': str(e)}), 500
 
 
-# @app.route('/api/v1/gameplay/start', methods=['POST'])
-# def start_gameplay():
-#     """
-#     Start a new gameplay session.
-#     Required fields:
-#     - rule_id (int)
-#     - player_role (str)
-#     """
-#     try:
-#         data = request.get_json()
-#         # Validate required fields
-#         if 'rule_id' not in data or 'player_role' not in data:
-#             return jsonify({'error': 'Missing required fields: rule_id and player_role'}), 400
-#
-#         # Type validation
-#         if not isinstance(data['rule_id'], int):
-#             return jsonify({'error': 'rule_id must be an integer'}), 400
-#
-#         # Implementation goes here
-#
-#         return jsonify({
-#             "rule_id": data['rule_id'],
-#             "name": "",
-#             "player_role": data['player_role'],
-#             "history": [],
-#             "next_action": {
-#                 "choice 1": "",
-#                 "choice 2": "",
-#                 "choose": ""
-#             }
-#         })
-#
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-#
-#
-# @app.route('/api/v1/gameplay/round', methods=['POST'])
-# def simulate_round():
-#     """
-#     Simulate a gameplay round.
-#     Required fields:
-#     - rule_id (int)
-#     - player_role (str)
-#     - round_id (int)
-#     """
-#     try:
-#         data = request.get_json()
-#         # Validate required fields
-#         required_fields = ['rule_id', 'player_role', 'round_id']
-#         for field in required_fields:
-#             if field not in data:
-#                 return jsonify({'error': f'Missing required field: {field}'}), 400
-#
-#         # Type validation
-#         if not isinstance(data['rule_id'], int):
-#             return jsonify({'error': 'rule_id must be an integer'}), 400
-#         if not isinstance(data['round_id'], int):
-#             return jsonify({'error': 'round_id must be an integer'}), 400
-#
-#         # Implementation goes here
-#
-#         return jsonify({
-#             "rule_id": data['rule_id'],
-#             "name": "",
-#             "player_role": data['player_role'],
-#             "history": [],
-#             "next_action": {
-#                 "choice 1": "",
-#                 "choice 2": "",
-#                 "choose": ""
-#             }
-#         })
-#
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
+@app.route('/api/v1/gameplay/start', methods=['POST'])
+def start_gameplay():
+    """
+    Start a new gameplay session.
+    Required fields:
+    - rule_id (int)
+    - player_role (str)
+    """
+    try:
+        data = request.get_json()
+        # Validate required fields
+        if 'rule_id' not in data or 'player_role' not in data:
+            return jsonify({'error': 'Missing required fields: rule_id and player_role'}), 400
+
+        # Type validation
+        if not isinstance(data['rule_id'], int):
+            return jsonify({'error': 'rule_id must be an integer'}), 400
+
+        # Implementation
+        rule_id = data['rule_id']
+        player_role = data['player_role']
+        file_path_rule = "return/board_game_id_" + str(rule_id) + "_follow.json"
+        start_game_content = start_game(rule_id, file_path_rule, player_role)
+
+        return jsonify({
+            "rule_id": rule_id,
+            "name": start_game_content['name'],
+            "player_role": start_game_content['player_role'],
+            "history": start_game_content['history'],
+            "next_action": start_game_content['next_action']
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/v1/gameplay/round', methods=['POST'])
+def simulate_round():
+    """
+    Simulate a gameplay round.
+    Required fields:
+    - rule_id (int)
+    - player_role (str)
+    - round_id (int)
+    """
+    try:
+        data = request.get_json()
+        # Validate required fields
+        required_fields = ['rule_id', 'action', 'round_id']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+
+        # Type validation
+        if not isinstance(data['rule_id'], int):
+            return jsonify({'error': 'rule_id must be an integer'}), 400
+        if not isinstance(data['round_id'], int):
+            return jsonify({'error': 'round_id must be an integer'}), 400
+
+        # Implementation
+        rule_id = data['rule_id']
+        round_id = data['round_id']
+        action = data['action']
+        file_path_rule = "return/board_game_id_" + str(rule_id) + "_follow.json"
+        file_path_history = "return/board_game_id_" + str(rule_id) + "_history.json"
+        round_content = game_round(rule_id, file_path_rule, file_path_history, round_id, action)
+
+        return jsonify({
+            "rule_id": rule_id,
+            "name": round_content['name'],
+            "player_role": round_content['player_role'],
+            "history": round_content['history'],
+            "next_action": round_content['next_action']
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 if __name__ == '__main__':

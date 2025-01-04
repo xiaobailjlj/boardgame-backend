@@ -174,8 +174,11 @@ def follow_up(rule_id, file_path_follow, follow_instructions):
     return response_content
 
 
-def start_game(player_role, game_context):
+def start_game(rule_id, file_path_rule, player_role):
+
     print("********** start game **********")
+    with open(file_path_rule) as json_data:
+        game_context = json.load(json_data)
 
     system_context = f'''
     You are co-creativity assistant to help design a board game.
@@ -243,7 +246,13 @@ def start_game(player_role, game_context):
     return response_content
 
 
-def game_round(game_context, game_history, action, round_id):
+def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
+    with open(file_path_rule) as json_data:
+        game_context = json.load(json_data)
+
+    with open(file_path_history) as json_data:
+        game_history = json.load(json_data)
+
     print("********** next round **********")
 
     history_example = json.dumps([{"round": 1, "actions": [
@@ -322,7 +331,7 @@ def game_round(game_context, game_history, action, round_id):
     cleaned_content = response_content_raw.strip('```json').strip('```').strip()
     response_content = json.loads(cleaned_content)
 
-    file_path_follow = "return/board_game_id_" + str(rule_id) + "_history.json"
+    file_path_follow = file_path_history
     with open(file_path_follow, 'w') as f:
         json.dump(response_content, f)
 
