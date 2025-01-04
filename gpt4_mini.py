@@ -72,7 +72,7 @@ def init_boardgame():
     print(completion.choices[0].message.content)
     response_content = completion.choices[0].message.content
 
-    file_path = "return/board_game_theme_fantacy.md"
+    file_path = "return/example.md"
     with open(file_path, "w") as file:
         file.write(response_content)
 
