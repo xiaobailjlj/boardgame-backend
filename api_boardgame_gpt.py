@@ -39,7 +39,7 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
     3. rules
     4. players
     '''
-    player_format = json.dumps({"MinPlayers": 3, "MaxPlayers": 5, "Roles": [
+    player_format = json.dumps({"number_of_players": 4, "roles": [
         {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
         {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
         {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
@@ -123,7 +123,7 @@ def follow_up(rule_id, file_path_follow, follow_instructions):
     4. players
     '''
 
-    player_format = json.dumps({"MinPlayers": 3, "MaxPlayers": 5, "Roles": [
+    player_format = json.dumps({"number_of_players": 4, "roles": [
         {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
         {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
         {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
