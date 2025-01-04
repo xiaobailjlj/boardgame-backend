@@ -19,6 +19,11 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
         filtered_mechanics[game_mechanic] = rule_template_mechanics[game_mechanic]
     game_mechanics_requirements = json.dumps(filtered_mechanics)
 
+    player_format = json.dumps({"number_of_players": 4, "roles": [
+        {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
+        {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
+        {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
+
     system_context_init = f'''
     You are co-creativity assistant to help design a board game.
 
@@ -37,12 +42,9 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
     1. name
     2. background
     3. rules
-    4. players
+    4. players, format: {player_format}
     '''
-    player_format = json.dumps({"number_of_players": 4, "roles": [
-        {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
-        {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
-        {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
+
 
     assistant_context_init = f'''
     1. name:
@@ -104,10 +106,14 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
 
 
 def follow_up(rule_id, file_path_follow, follow_instructions):
+    print("********** updating_boardgame **********")
     with open(file_path_follow) as json_data:
         init_content = json.load(json_data)
 
-    print("********** updating_boardgame **********")
+    player_format = json.dumps({"number_of_players": 4, "roles": [
+        {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
+        {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
+        {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
 
     system_context_follow = f'''
     You are co-creativity assistant to help design a board game.
@@ -120,13 +126,9 @@ def follow_up(rule_id, file_path_follow, follow_instructions):
     1. name
     2. background
     3. rules
-    4. players
+    4. players, format: {player_format}
     '''
 
-    player_format = json.dumps({"number_of_players": 4, "roles": [
-        {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
-        {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
-        {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
     assistant_context_follow = f'''
     1. name:
     Pandemic Legacy
