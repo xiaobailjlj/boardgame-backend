@@ -6,7 +6,8 @@ import datetime
 from api_boardgame_gpt import init_boardgame, follow_up, start_game, game_round
 
 app = Flask(__name__)
-
+from flask_cors import CORS
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
 
 # Error handling
 @app.errorhandler(400)
