@@ -394,34 +394,11 @@
             <div class="book-content">
                 <h2 class="rules-title">Game Rules</h2>
                 <div id="rules-content">
-                    <p>1. Each player takes turns rolling the dice.</p>
-                    <p>2. Move your character according to the dice roll.</p>
-                    <p>3. Special tiles may trigger events.</p>
-                    <p>4. First player to reach the end wins!</p>
-                    <h3>Special Tiles:</h3>
-                    <p>🌟 Star Tile - Extra turn</p>
-                    <p>⚡ Lightning - Move forward 2 spaces</p>
-                    <p>☁️ Cloud - Skip next turn</p>
-                    <h3>Winning:</h3>
-                    <p>To win the game, you must:</p>
-                    <p>- Reach the final tile</p>
-                    <p>- Complete all challenges</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <p>- Collect required items</p>
-                    <div class="rules-edit-section" id="rules-edit">
-                        <textarea id="new-rule" placeholder="Please input your rules..."></textarea>
-                        <button id="update-rules">Update Rules</button>
-                    </div>
+
+                </div>
+                <div class="rules-edit-section" id="rules-edit">
+                    <textarea id="new-rule" placeholder="Please input your rules..."></textarea>
+                    <button id="update-rules">Update Rules</button>
                 </div>
             </div>
         </div>
@@ -478,6 +455,9 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+            updateRuleContent(data);
             let selectedCharacter = null;
             const characterCards = document.querySelectorAll('.character-card');
             const rulesEditSection = document.getElementById('rules-edit');
@@ -513,6 +493,55 @@
                     startButton.disabled = false;
                 });
             });
+
+            function updateRuleContent(data) {
+                const rulesContent = document.getElementById('rules-content');
+                rulesContent.innerHTML = '';
+
+                const background = document.createElement('div');
+                background.innerHTML = `<h3>Background</h3><p>${data.background}</p>`;
+                rulesContent.appendChild(background);
+
+                const rules = document.createElement('div');
+                rules.innerHTML = '<h3>Rules</h3>';
+                const rulesList = document.createElement('ul');
+                rulesList.style.listStyleType = 'none';
+                rulesList.style.paddingLeft = '0';
+
+                rulesList.appendChild(createListFromObject(data.rules));
+
+                rules.appendChild(rulesList);
+                rulesContent.appendChild(rules);
+            }
+
+            function createListFromObject(obj, level = 1) {
+                const list = document.createElement('ul');
+                list.style.listStyleType = 'none';
+                list.style.paddingLeft = '0';
+
+                Object.keys(obj).forEach(key => {
+                    const listItem = document.createElement('li');
+                    if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
+                        listItem.innerHTML = `<strong style="font-size: ${Math.max(1, 1 - level * 0.1)}em;">${key}</strong>`;
+                        listItem.appendChild(createListFromObject(obj[key], level + 1));
+                    } else if (Array.isArray(obj[key])) {
+                        listItem.innerHTML = `<strong style="font-size: ${Math.max(1, 1 - level * 0.1)}em;">${key}</strong>`;
+                        const subList = document.createElement('ul');
+                        subList.style.listStyleType = 'none';
+                        subList.style.paddingLeft = '0';
+                        obj[key].forEach(subItemValue => {
+                            const subItem = document.createElement('li');
+                            subItem.textContent = subItemValue;
+                            subList.appendChild(subItem);
+                        });
+                        listItem.appendChild(subList);
+                    } else {
+                        listItem.textContent = `${key}: ${obj[key]}`;
+                    }
+                    list.appendChild(listItem);
+                });
+                return list;
+            }
 
 
             // Modified game initialization
