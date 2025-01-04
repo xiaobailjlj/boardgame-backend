@@ -38,20 +38,20 @@ def init_boardgame(number_of_players, game_duration, description_of_background, 
     3. rules
     4. players
     '''
+    player_format = json.dumps({"MinPlayers":3,"MaxPlayers":5,"Roles":[{"name":"The Medic","ability":"Negotiate for additional healing resources."},{"name":"The Strategist","ability":"Plan ambushes against rival factions."},{"name":"The Diplomat","ability":"Negotiate more favorable trades during alliances."}]})
+    assistant_context_init = f'''
+    1. name:
+    Pandemic Legacy
 
-    # assistant_context_init = '''
-    # 1. name:
-    # Pandemic Legacy
-    #
-    # 2. background:
-    # Pandemic Legacy is a co-operative campaign game, with an overarching story arc played through 12-24 sessions, depending on how well your group does at the game. At the beginning, the game starts in a very similar fashion as basic Pandemic, in which your team of disease-fighting specialists races against the clock to travel around the world, treating disease hot spots while researching cures for each of four plagues before they get out of hand
-    #
-    # 3. rules
-    # During a player's turn, they have four actions available, with which they may travel around in the world in various ways (sometimes needing to discard a card), build structures like research stations, treat diseases (removing one cube from the board; if all cubes of a color have been removed, the disease has been eradicated), trade cards with other players, or find a cure for a disease (requiring five cards of the same color to be discarded while at a research station). Each player has a unique role with special abilities to help them at these actions. After a player has taken their actions, they draw two cards. These cards can include epidemic cards, which will place new disease cubes on the board, and can lead to an outbreak, spreading disease cubes even further. Outbreaks additionally increase the panic level of a city, making that city more expensive to travel to. Each month in the game, you have two chances to achieve that month's objectives. If you succeed, you win and immediately move on to the next month. If you fail, you have a second chance, with more funding for beneficial event cards. During the campaign, new rules and components will be introduced. These will sometimes require you to permanently alter the components of the game; this includes writing on cards, ripping up cards, and placing permanent stickers on components. Your characters can gain new skills, or detrimental effects. A character can even be lost entirely, at which point it's no longer available for play. Part of the Pandemic serie.
-    #
-    # 4. players:
-    # dispatcher, medic, scientist, researcher, operations expert, contingency planner, quarantine specialist
-    # '''
+    2. background:
+    Pandemic Legacy is a co-operative campaign game, with an overarching story arc played through 12-24 sessions, depending on how well your group does at the game. At the beginning, the game starts in a very similar fashion as basic Pandemic, in which your team of disease-fighting specialists races against the clock to travel around the world, treating disease hot spots while researching cures for each of four plagues before they get out of hand
+
+    3. rules
+    During a player's turn, they have four actions available, with which they may travel around in the world in various ways (sometimes needing to discard a card), build structures like research stations, treat diseases (removing one cube from the board; if all cubes of a color have been removed, the disease has been eradicated), trade cards with other players, or find a cure for a disease (requiring five cards of the same color to be discarded while at a research station). Each player has a unique role with special abilities to help them at these actions. After a player has taken their actions, they draw two cards. These cards can include epidemic cards, which will place new disease cubes on the board, and can lead to an outbreak, spreading disease cubes even further. Outbreaks additionally increase the panic level of a city, making that city more expensive to travel to. Each month in the game, you have two chances to achieve that month's objectives. If you succeed, you win and immediately move on to the next month. If you fail, you have a second chance, with more funding for beneficial event cards. During the campaign, new rules and components will be introduced. These will sometimes require you to permanently alter the components of the game; this includes writing on cards, ripping up cards, and placing permanent stickers on components. Your characters can gain new skills, or detrimental effects. A character can even be lost entirely, at which point it's no longer available for play. Part of the Pandemic serie.
+
+    4. players:
+    {player_format}
+    '''
 
     user_context_init_json = {
         "number_of_players": number_of_players,
@@ -65,10 +65,10 @@ def init_boardgame(number_of_players, game_duration, description_of_background, 
                 "role": "system",
                 "content": system_context_init,
             },
-            # {
-            #     "role": "assistant",
-            #     "content": assistant_context_init,
-            # },
+            {
+                "role": "assistant",
+                "content": assistant_context_init,
+            },
             {
                 "role": "user",
                 "content": user_context_init
@@ -113,21 +113,20 @@ def follow_up(init_content, follow_instructions):
     4. players
     '''
 
-    # assistant_context_follow = '''
-    # 1. name:
-    # Pandemic Legacy
-    #
-    # 2. background:
-    # Pandemic Legacy is a co-operative campaign game, with an overarching story arc played through 12-24 sessions, depending on how well your group does at the game. At the beginning, the game starts in a very similar fashion as basic Pandemic, in which your team of disease-fighting specialists races against the clock to travel around the world, treating disease hot spots while researching cures for each of four plagues before they get out of hand
-    #
-    # 3. rules
-    # During a player's turn, they have four actions available, with which they may travel around in the world in various ways (sometimes needing to discard a card), build structures like research stations, treat diseases (removing one cube from the board; if all cubes of a color have been removed, the disease has been eradicated), trade cards with other players, or find a cure for a disease (requiring five cards of the same color to be discarded while at a research station). Each player has a unique role with special abilities to help them at these actions. After a player has taken their actions, they draw two cards. These cards can include epidemic cards, which will place new disease cubes on the board, and can lead to an outbreak, spreading disease cubes even further. Outbreaks additionally increase the panic level of a city, making that city more expensive to travel to. Each month in the game, you have two chances to achieve that month's objectives. If you succeed, you win and immediately move on to the next month. If you fail, you have a second chance, with more funding for beneficial event cards. During the campaign, new rules and components will be introduced. These will sometimes require you to permanently alter the components of the game; this includes writing on cards, ripping up cards, and placing permanent stickers on components. Your characters can gain new skills, or detrimental effects. A character can even be lost entirely, at which point it's no longer available for play. Part of the Pandemic serie.
-    #
-    # 4. players:
-    # dispatcher, medic, scientist, researcher, operations expert, contingency planner, quarantine specialist
-    # '''
+    player_format = json.dumps({"MinPlayers":3,"MaxPlayers":5,"Roles":[{"name":"The Medic","ability":"Negotiate for additional healing resources."},{"name":"The Strategist","ability":"Plan ambushes against rival factions."},{"name":"The Diplomat","ability":"Negotiate more favorable trades during alliances."}]})
+    assistant_context_follow = f'''
+    1. name:
+    Pandemic Legacy
 
-    assistant_context_follow = {json.dumps(init_content)}
+    2. background:
+    Pandemic Legacy is a co-operative campaign game, with an overarching story arc played through 12-24 sessions, depending on how well your group does at the game. At the beginning, the game starts in a very similar fashion as basic Pandemic, in which your team of disease-fighting specialists races against the clock to travel around the world, treating disease hot spots while researching cures for each of four plagues before they get out of hand
+
+    3. rules
+    During a player's turn, they have four actions available, with which they may travel around in the world in various ways (sometimes needing to discard a card), build structures like research stations, treat diseases (removing one cube from the board; if all cubes of a color have been removed, the disease has been eradicated), trade cards with other players, or find a cure for a disease (requiring five cards of the same color to be discarded while at a research station). Each player has a unique role with special abilities to help them at these actions. After a player has taken their actions, they draw two cards. These cards can include epidemic cards, which will place new disease cubes on the board, and can lead to an outbreak, spreading disease cubes even further. Outbreaks additionally increase the panic level of a city, making that city more expensive to travel to. Each month in the game, you have two chances to achieve that month's objectives. If you succeed, you win and immediately move on to the next month. If you fail, you have a second chance, with more funding for beneficial event cards. During the campaign, new rules and components will be introduced. These will sometimes require you to permanently alter the components of the game; this includes writing on cards, ripping up cards, and placing permanent stickers on components. Your characters can gain new skills, or detrimental effects. A character can even be lost entirely, at which point it's no longer available for play. Part of the Pandemic serie.
+
+    4. players:
+    {player_format}
+    '''
 
     message = [
         {
@@ -160,6 +159,8 @@ def follow_up(init_content, follow_instructions):
         json.dump(response_content, f)
 
     return response_content
+
+
 def start_game(player_role, game_context):
     print("********** start game **********")
 
@@ -229,18 +230,19 @@ def start_game(player_role, game_context):
     return response_content
 
 
-def game_round(game_context, game_history, action):
+def game_round(game_context, game_history, action, round_id):
     print("********** next round **********")
 
     history_example = json.dumps([{"round":1,"actions":[{"player":"Warrior","action":"Move","description":"Alice moved to the Jungle Clearing.","cost":1,"result":"Success"},{"player":"Explorer","action":"Explore","description":"Bob explored an Ancient Ruin and found a treasure map.","cost":2,"result":"Success - Treasure Map acquired."},{"player":"Scholar","action":"Rest","description":"Carol rested to recover 2 health points.","cost":1,"result":"Success - Health restored to 8."},{"player":"Trader","action":"Engage","description":"Dave engaged an enemy lurking in the Forest Trail.","cost":3,"result":"Failure - Took 3 damage."}],"events":[{"type":"Environment Change","description":"A storm begins, reducing visibility for all players in open areas."}]},{"round":2,"actions":[{"player":"Warrior","action":"Explore","description":"Alice explored a cave and discovered a hidden passage.","cost":2,"result":"Critical Success - Hidden passage revealed!"},{"player":"Explorer","action":"Trade","description":"Bob traded the treasure map with Carol for a health potion.","cost":1,"result":"Success - Items exchanged."},{"player":"Scholar","action":"Engage","description":"Carol fought a Giant Spider in the cave.","cost":3,"result":"Success - Spider defeated, gained 3 XP."},{"player":"Trader","action":"Strategize","description":"Dave used his ability to grant Bob an extra action.","cost":2,"result":"Success - Bob gains 1 additional action."}],"events":[{"type":"Quest Triggered","description":"The group unlocked the 'Lost Artifact' quest by finding the hidden passage."}]}])
 
     system_context = f'''
     You are co-creativity assistant to help design a board game.
-    Now you have to accompany the players to try out this game. The game is in the middle, you have been provided with the game rules, the role of the player, and game history.
-    The action of player is for this round. You are required to generate other player's action in this round, and provide a guide to the player's next action for next round.
+    Now you have to accompany the players to try out this game. The game is in the middle, you have been provided with the game rules, the role of the player, and game history. The current round is {round_id}.
+    The action of player is for this round. You are required to :
+    1. generate other player's action in this round, write to history of this round, other players are in the game context.
+    2. provide a guide to the player's next action for next round.
 
-
-    The game is:
+    The game context is:
     {json.dumps(game_context)}
     
     The game history is:
@@ -288,27 +290,31 @@ def game_round(game_context, game_history, action):
     return response_content
 
 if __name__ == "__main__":
-    # number_of_players = 4
-    # game_duration = "1-2 hours"
-    # description_of_background = "adventure happen on a mysterious island"
-    # game_category = "adventure"
-    # game_mechanics = ["Action and Turn Management", "Dice and Randomness", "Player Interaction"]
+    # number_of_players = 3
+    # game_duration = "3-4 hours"
+    # description_of_background = "Fight for medical resources in plague cities"
+    # game_category = "bluffing"
+    # game_mechanics = ["Dice and Randomness", "Player Interaction"]
     #
     # init_content = init_boardgame(number_of_players, game_duration, description_of_background, game_category, game_mechanics)
+
+    # with open('return/board_game_name_Resource Wars: Plague Survivors_follow.json') as json_data:
+    #     init_content = json.load(json_data)
     #
-    # follow_instructions = 'Provide more detailed rules for Action Points.'
+    # follow_instructions = 'Provide more detailed rules for dice.'
     # follow_content = follow_up(init_content, follow_instructions)
 
-    with open('return/board_game_name_Quest for the Lost Island_ori.json') as json_data:
+    with open('return/board_game_name_Resource Wars: Plague Survivors_follow.json') as json_data:
         game_context = json.load(json_data)
 
-    # player_role = "Warrior: Skilled in combat, can protect and confront threats."
+    # player_role = "The Medic"
     # history = start_game(player_role, game_context)
 
-    with open('return/board_game_name_Quest for the Lost Island_history.json') as json_data:
+    with open('return/board_game_name_Resource Wars: Plague Survivors_history.json') as json_data:
         game_history = json.load(json_data)
-    action = "scout ahead"
-    history = game_round(game_context, game_history, action)
+    action = "roll the dice"
+    round_id = 3
+    history = game_round(game_context, game_history, action, round_id)
 
 
 
