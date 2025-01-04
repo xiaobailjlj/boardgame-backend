@@ -13,7 +13,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f4f4f4;
+            background: url('./static/table.jpg') no-repeat center center/cover;
         }
         .container {
             background: #fff;
@@ -51,6 +51,25 @@
         button:hover {
             background-color: #45a049;
         }
+
+        .mechanic-option {
+            width: auto;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .mechanic-option:hover {
+            background-color: #0000FF;
+            color: white;
+        }
+
+        .mechanic-option.selected {
+            background-color: #0000FF;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -78,13 +97,13 @@
             </div>
             <div class="form-group">
                 <label for="mechanics">Mechanics:</label>
-                <select id="mechanics">
-                    <option value="" disabled selected>Select a mechanic</option>
-                    <option value="deck-building">Deck Building</option>
-                    <option value="dice-rolling">Dice Rolling</option>
-                    <option value="tile-placement">Tile Placement</option>
-                    <option value="resource-management">Resource Management</option>
-                </select>
+                <div id="mechanics">
+                    <button type="button" class="mechanic-option" data-value="deck-building">Deck Building</button>
+                    <button type="button" class="mechanic-option" data-value="dice-rolling">Dice Rolling</button>
+                    <button type="button" class="mechanic-option" data-value="tile-placement">Tile Placement</button>
+                    <button type="button" class="mechanic-option" data-value="resource-management">Resource Management</button>
+                </div>
+                <p id="selected-mechanics">Selected Mechanics: None</p>
             </div>
             <button type="submit">Find Games</button>
         </form>
@@ -98,15 +117,27 @@
             const maxPlayers = document.getElementById('max-players').value;
             const time = document.getElementById('time').value;
             const type = document.getElementById('type').value;
-            const mechanics = document.getElementById('mechanics').value;
+            const mechanics = Array.from(document.querySelectorAll('.mechanic-option.selected')).map(button => button.dataset.value);
 
             if (!minPlayers || !maxPlayers || !time || !type || !mechanics) {
                 alert('Please fill out all fields.');
                 return;
             }
 
-            window.location.href = 'play.html';
+            window.location.href = `play.html?minPlayers=${minPlayers}&maxPlayers=${maxPlayers}&time=${time}&type=${type}&mechanics=${mechanics.join(',')}`;
         });
+        document.querySelectorAll('.mechanic-option').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle('selected');
+                updateSelectedMechanics();
+            });
+        });
+
+        function updateSelectedMechanics() {
+            const selectedOptions = Array.from(document.querySelectorAll('.mechanic-option.selected'))
+                .map(button => button.textContent);
+            document.getElementById('selected-mechanics').innerText = `Selected Mechanics: ${selectedOptions.join(', ')}`;
+        }
     </script>
 </body>
 </html>
