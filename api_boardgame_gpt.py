@@ -43,6 +43,7 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
         {"name": "The Medic", "ability": "Negotiate for additional healing resources."},
         {"name": "The Strategist", "ability": "Plan ambushes against rival factions."},
         {"name": "The Diplomat", "ability": "Negotiate more favorable trades during alliances."}]})
+
     assistant_context_init = f'''
     1. name:
     Pandemic Legacy

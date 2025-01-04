@@ -57,7 +57,7 @@ def generate_rules():
         # Implementation
         number_of_players = data['number_of_players']
         game_duration = data['game_duration']
-        description_of_background = "Fight for medical resources in plague cities"
+        description_of_background = data['description_of_background']
         game_category = data['game_category']
         game_mechanics = data['game_mechanics']
         rule_id = int(datetime.datetime.now().timestamp())
