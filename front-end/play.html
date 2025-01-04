@@ -407,17 +407,8 @@
     <!-- New character selection container -->
     <div class="character-select-container" id="character-select">
         <h1 style="color: white; margin-bottom: 30px;">Choose Your Character</h1>
-        <div class="character-grid">
-            <div class="character-card" data-character="assassin">
-                <div class="character-image" style="background-image: url('./static/assasin.png')"></div>
-                <div class="character-name">Assassin</div>
-                <div class="character-description">Master of stealth and precision. Special ability: Double move on odd rolls.</div>
-            </div>
-            <div class="character-card" data-character="magician">
-                <div class="character-image" style="background-image: url('./static/magician.png')"></div>
-                <div class="character-name">Magician</div>
-                <div class="character-description">Wielder of arcane powers. Special ability: Can reroll once per turn.</div>
-            </div>
+        <div class="character-grid" id="character-grid">
+            <!-- Character cards will be dynamically generated here -->
         </div>
         <button class="start-game-button" id="start-game" disabled>Start Game</button>
     </div>
@@ -456,10 +447,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
+            const urlPrefix = 'http://localhost:5000';
             const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
             updateRuleContent(data);
             let selectedCharacter = null;
-            const characterCards = document.querySelectorAll('.character-card');
+<!--            characterCards = document.querySelectorAll('.character-card');-->
             const rulesEditSection = document.getElementById('rules-edit');
             const startButton = document.getElementById('start-game');
             const characterSelect = document.getElementById('character-select');
@@ -467,32 +459,60 @@
             characterSelect.style.display = 'flex';
             const playerPositions = {
                 2: [
-                    { class: 'you', x: '50%', y: '70%' },
-                    { class: 'ai1', x: '50%', y: '30%' }
+                    { class: 'you', x: '40%', y: '70%' },
+                    { class: 'ai1', x: '40%', y: '0%' }
                 ],
                 3: [
-                    { class: 'you', x: '50%', y: '70%' },
-                    { class: 'ai1', x: '20%', y: '30%' },
-                    { class: 'ai2', x: '80%', y: '30%' }
+                    { class: 'you', x: '40%', y: '70%' },
+                    { class: 'ai1', x: '0%', y: '0%' },
+                    { class: 'ai2', x: '80%', y: '0%' }
                 ],
                 4: [
-                    { class: 'you', x: '50%', y: '70%'},
-                    { class: 'ai1', x: '20%', y: '50%' },
-                    { class: 'ai2', x: '80%', y: '50%' },
-                    { class: 'ai3', x: '50%', y: '30%' }
+                    { class: 'you', x: '40%', y: '70%'},
+                    { class: 'ai1', x: '0%', y: '40%' },
+                    { class: 'ai2', x: '80%', y: '40%' },
+                    { class: 'ai3', x: '40%', y: '0%' }
                 ]
             };
+            const characterGrid = document.getElementById('character-grid');
 
-            characterCards.forEach(card => {
+            function createCharacterCard(character) {
+                const card = document.createElement('div');
+                card.className = 'character-card';
+                card.dataset.character = character.name.toLowerCase();
+
+                const image = document.createElement('div');
+                image.className = 'character-image';
+                image.style.backgroundImage = `url('./static/player-icons/${character.image}')`;
+
+                const name = document.createElement('div');
+                name.className = 'character-name';
+                name.textContent = character.name;
+
+                const description = document.createElement('div');
+                description.className = 'character-description';
+                description.textContent = character.ability;
+
+                card.appendChild(image);
+                card.appendChild(name);
+                card.appendChild(description);
+
                 card.addEventListener('click', () => {
-                    // Remove selected class from all cards
+                    const characterCards = document.querySelectorAll('.character-card');
                     characterCards.forEach(c => c.classList.remove('selected'));
-                    // Add selected class to clicked card
                     card.classList.add('selected');
                     selectedCharacter = card.dataset.character;
                     startButton.disabled = false;
                 });
+
+                return card;
+            }
+
+            (data.players.roles || data.players.Roles).forEach(character => {
+                const card = createCharacterCard(character);
+                characterGrid.appendChild(card);
             });
+
 
             function updateRuleContent(data) {
                 const rulesContent = document.getElementById('rules-content');
@@ -515,9 +535,22 @@
             }
 
             function createListFromObject(obj, level = 1) {
+                if (!obj || typeof obj !== 'object') {
+                    return document.createElement('ul');
+                }
+
                 const list = document.createElement('ul');
                 list.style.listStyleType = 'none';
                 list.style.paddingLeft = '0';
+
+                if (Object.keys(obj).length === 0) {
+                    Object.values(obj).forEach((value, index) => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `Item ${index + 1}: ${value}`;
+                        list.appendChild(listItem);
+                    });
+                    return list;
+                }
 
                 Object.keys(obj).forEach(key => {
                     const listItem = document.createElement('li');
@@ -535,6 +568,17 @@
                             subList.appendChild(subItem);
                         });
                         listItem.appendChild(subList);
+                    } else if (isObjectWithNoKeys(obj[key])) {
+                        listItem.innerHTML = `<strong>${key}</strong>`;
+                        const subList = document.createElement('ul');
+                        subList.style.listStyleType = 'none';
+                        subList.style.paddingLeft = '0';
+                        Object.values(obj[key]).forEach(value => {
+                            const subItem = document.createElement('li');
+                            subItem.textContent = value;
+                            subList.appendChild(subItem);
+                        });
+                        listItem.appendChild(subList);
                     } else {
                         listItem.textContent = `${key}: ${obj[key]}`;
                     }
@@ -543,10 +587,14 @@
                 return list;
             }
 
+            function isObjectWithNoKeys(obj) {
+                return typeof obj === 'object' && obj !== null && Object.keys(obj).length === 0 && Object.values(obj).length > 0;
+            }
+
 
             // Modified game initialization
             function initializeGame(characterType) {
-                const playersCount = 4;
+                const playersCount = data.number_of_players;
                 const container = document.getElementById('player-container');
                 container.innerHTML = '';
 
@@ -556,11 +604,11 @@
                     player.style.left = pos.x;
                     player.style.top = pos.y;
                     if (pos.class === 'you') {
-                        player.style.backgroundImage = `url("./static/${characterType}.png")`;
+                        player.style.backgroundImage = `url("./static/player-icons/${characterType}.png")`;
                         player.style.backgroundSize = 'cover';
                         player.textContent = 'You';
                     } else {
-                        player.style.backgroundImage = 'url("./static/magician.png")';
+                        player.style.backgroundImage = 'url("./static/player-icons/magician.png")';
                         player.style.backgroundSize = 'cover';
                         player.textContent = pos.class.replace('ai', 'AI Player ');
                     }
@@ -586,12 +634,6 @@
                 logContainer.appendChild(entry);
                 logContainer.scrollTop = logContainer.scrollHeight;
             }
-
-
-            // Add some initial log entries
-            addLogEntry('Game started', 'system');
-            addLogEntry('Welcome to the adventure!', 'system');
-            addLogEntry('Your turn to roll the dice', 'system');
 
             // Dice roll event
             document.getElementById('roll-dice').addEventListener('click', function() {
@@ -662,7 +704,33 @@
                     initializeGame(selectedCharacter);
 
                     // Add initial log entry
+                    addLogEntry('Game started', 'system');
+                    addLogEntry('Welcome to the adventure!', 'system');
                     addLogEntry(`Game started with ${selectedCharacter} character`, 'system');
+                    addLogEntry('Your turn to choose an activity', 'system');
+                }
+            });
+            const newRule = document.getElementById('new-rule');
+            document.getElementById('update-rules').addEventListener('click', () => {
+                if (newRule.value.trim() !== '') {
+                    const newRuleData = newRule.value.trim();
+                    fetch(urlPrefix + '/api/v1/rules/optimize', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ rule_id: data.rule_id, feedback: newRuleData })
+                    })
+                    .then(response => response.json())
+                    .then(updatedData => {
+                        updateRuleContent(updatedData);
+                        newRule.value = '';
+                        alert('Rules updated successfully!');
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('An error occurred while updating the rules.');
+                    });
                 }
             });
         });
