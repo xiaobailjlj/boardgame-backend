@@ -43,6 +43,11 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
     2. background
     3. rules
     4. players, format: {player_format}
+    
+    After generating the output, evaluate and validate:
+    1. Does the game follow the category features?
+    2. Are the mechanics fully utilized with unique player actions?
+    3. Does the background match the theme?
     '''
 
 
