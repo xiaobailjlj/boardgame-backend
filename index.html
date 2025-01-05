@@ -123,7 +123,7 @@
         document.getElementById('game-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            const urlPrefix = 'http://localhost:5000';
+            const urlPrefix = 'https://3f98-80-114-20-42.ngrok-free.app';
 
             const minPlayers = document.getElementById('players').value;
             const time = document.getElementById('time').value;
@@ -135,7 +135,7 @@
                 alert('Please fill out all fields.');
                 return;
             }
-            fetch('http://localhost:5000/api/v1/rules/generate', {
+            fetch(urlPrefix + '/api/v1/rules/generate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
