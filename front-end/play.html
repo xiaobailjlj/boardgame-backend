@@ -14,6 +14,109 @@
             color: #fff;
             min-height: 100vh;
         }
+        .effect-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .floating-text {
+            position: absolute;
+            animation: floatUp 1s ease-out forwards;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 3px rgba(0,0,0,0.5);
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+        }
+
+        .flash {
+            animation: flash 0.5s ease-out;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .bounce {
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .center-notice {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 24px;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            20%, 80% { opacity: 1; }
+        }
+
+        .resource-change {
+            position: absolute;
+            font-weight: bold;
+            animation: popFade 1s ease-out forwards;
+        }
+
+        .resource-gain {
+            color: #4CAF50;
+        }
+
+        .resource-loss {
+            color: #F44336;
+        }
+
+        @keyframes popFade {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0;
+            }
+        }
 
         .game-container {
             flex: 1;
@@ -207,6 +310,14 @@
             animation: fadeIn 0.3s ease-in;
         }
 
+        .log-entry.result {
+            color: #FFD700;
+        }
+
+        .log-entry.event {
+            color: #ff3333;
+        }
+
         .log-entry.my-player {
             color: #33ff33;
         }
@@ -238,7 +349,6 @@
             background-size: cover;
             border: 5px solid #fff;
             transition: all 0.3s ease;
-<!--            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);-->
             border-radius: 16px;
             padding: 20px;
             position: relative;
@@ -492,6 +602,7 @@
             </div>
         </div>
     </div>
+    <div id="effect-container" class="effect-container"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -499,6 +610,7 @@
             const urlPrefix = 'http://localhost:5000';
             const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
             let selectedCharacter = null;
+            let myPlayer = null;
             let roundNumber = 1;
 
             const rulesEditSection = document.getElementById('rules-edit');
@@ -530,7 +642,7 @@
             function createCharacterCard(character) {
                 const card = document.createElement('div');
                 card.className = 'character-card';
-                card.dataset.character = character.name.toLowerCase();
+                card.dataset.character = character.name;
 
                 const image = document.createElement('div');
                 image.className = 'character-image';
@@ -582,6 +694,62 @@
                 });
             }
 
+            const gameEffects = {
+                showFloatingText: (text, x, y, color = 'white') => {
+                    const element = document.createElement('div');
+                    element.className = 'floating-text';
+                    element.textContent = text;
+                    element.style.left = `${x}px`;
+                    element.style.top = `${y}px`;
+                    element.style.color = color;
+
+                    document.getElementById('effect-container').appendChild(element);
+                    setTimeout(() => element.remove(), 1000);
+                },
+
+                showCenterNotice: (text, duration = 2000) => {
+                    const notice = document.createElement('div');
+                    notice.className = 'center-notice';
+                    notice.textContent = text;
+
+                    document.getElementById('effect-container').appendChild(notice);
+                    setTimeout(() => notice.remove(), duration);
+                },
+
+                addFlash: (element) => {
+                    element.classList.add('flash');
+                    setTimeout(() => element.classList.remove('flash'), 500);
+                },
+
+                addShake: (element) => {
+                    element.classList.add('shake');
+                    setTimeout(() => element.classList.remove('shake'), 500);
+                },
+
+                addBounce: (element) => {
+                    element.classList.add('bounce');
+                    setTimeout(() => element.classList.remove('bounce'), 500);
+                },
+
+                showResourceChange: (element, value) => {
+                    const rect = element.getBoundingClientRect();
+                    const change = document.createElement('div');
+                    change.className = `resource-change ${value === 'success' ? 'resource-gain' : 'resource-loss'}`;
+                    change.textContent = value;
+                    change.style.left = `${rect.left + rect.width / 2}px`;
+                    change.style.top = `${rect.top - 20}px`;
+
+                    document.getElementById('effect-container').appendChild(change);
+                    setTimeout(() => change.remove(), 1000);
+                }
+            };
+
+            function onPlayerAction(actionElement) {
+                gameEffects.addBounce(actionElement);
+                const rect = actionElement.getBoundingClientRect();
+<!--                gameEffects.showFloatingText('Action Used!', rect.left, rect.top);-->
+            }
+
 
             function updateRuleContent(data) {
                 const rulesContent = document.getElementById('rules-content');
@@ -605,59 +773,85 @@
 
             function createListFromObject(obj, level = 1) {
                 if (!obj || typeof obj !== 'object') {
-                    return document.createElement('ul');
+                    const item = document.createElement('li');
+                    item.textContent = String(obj);
+                    return item;
                 }
 
                 const list = document.createElement('ul');
                 list.style.listStyleType = 'none';
-                list.style.paddingLeft = '0';
+                list.style.paddingLeft = '0'; // Remove indentation
 
-                if (Object.keys(obj).length === 0) {
-                    Object.values(obj).forEach((value, index) => {
+                // Handle Arrays
+                if (Array.isArray(obj)) {
+                    obj.forEach((item, index) => {
                         const listItem = document.createElement('li');
-                        listItem.textContent = `Item ${index + 1}: ${value}`;
+                        if (typeof item === 'object') {
+                            if (Array.isArray(item)) {
+                                // Handle nested arrays
+                                const subList = createListFromObject(item, level + 1);
+                                listItem.appendChild(subList);
+                            } else {
+                                // Handle objects within arrays
+                                Object.entries(item).forEach(([key, value]) => {
+                                    const subItem = document.createElement('div');
+                                    subItem.style.marginBottom = '8px';
+                                    if (typeof value === 'object') {
+                                        subItem.innerHTML = `<strong style="font-size: ${Math.max(1, 1.2 - level * 0.1)}em; color: ${getColorForLevel(level)};">${key}:</strong>`;
+                                        subItem.appendChild(createListFromObject(value, level + 1));
+                                    } else {
+                                        subItem.innerHTML = `<span style="font-size: ${Math.max(1, 1.2 - level * 0.1)}em;">${key}: ${value}</span>`;
+                                    }
+                                    listItem.appendChild(subItem);
+                                });
+                            }
+                        } else {
+                            // Handle primitive values in arrays
+                            listItem.textContent = String(item);
+                        }
                         list.appendChild(listItem);
                     });
                     return list;
                 }
 
-                Object.keys(obj).forEach(key => {
+                // Handle Objects
+                Object.entries(obj).forEach(([key, value]) => {
                     const listItem = document.createElement('li');
-                    if (typeof obj[key] === 'object' && !Array.isArray(obj[key])) {
-                        listItem.innerHTML = `<strong style="font-size: ${Math.max(1, 1 - level * 0.1)}em;">${key}</strong>`;
-                        listItem.appendChild(createListFromObject(obj[key], level + 1));
-                    } else if (Array.isArray(obj[key])) {
-                        listItem.innerHTML = `<strong style="font-size: ${Math.max(1, 1 - level * 0.1)}em;">${key}</strong>`;
-                        const subList = document.createElement('ul');
-                        subList.style.listStyleType = 'none';
-                        subList.style.paddingLeft = '0';
-                        obj[key].forEach(subItemValue => {
-                            const subItem = document.createElement('li');
-                            subItem.textContent = subItemValue;
-                            subList.appendChild(subItem);
-                        });
-                        listItem.appendChild(subList);
-                    } else if (isObjectWithNoKeys(obj[key])) {
-                        listItem.innerHTML = `<strong>${key}</strong>`;
-                        const subList = document.createElement('ul');
-                        subList.style.listStyleType = 'none';
-                        subList.style.paddingLeft = '0';
-                        Object.values(obj[key]).forEach(value => {
-                            const subItem = document.createElement('li');
-                            subItem.textContent = value;
-                            subList.appendChild(subItem);
-                        });
-                        listItem.appendChild(subList);
+                    listItem.style.marginBottom = '8px';
+
+                    if (typeof value === 'object') {
+                        // Handle nested objects and arrays
+                        const titleSpan = document.createElement('span');
+                        titleSpan.innerHTML = `<strong style="font-size: ${Math.max(1, 1.2 - level * 0.1)}em; color: ${getColorForLevel(level)};">${key}:</strong>`;
+                        listItem.appendChild(titleSpan);
+
+                        // Add a line break after the title
+                        listItem.appendChild(document.createElement('br'));
+
+                        const contentDiv = document.createElement('div');
+                        contentDiv.style.marginTop = '4px';
+                        contentDiv.appendChild(createListFromObject(value, level + 1));
+                        listItem.appendChild(contentDiv);
                     } else {
-                        listItem.textContent = `${key}: ${obj[key]}`;
+                        // Handle primitive values
+                        listItem.innerHTML = `<span style="font-size: ${Math.max(1, 1.2 - level * 0.1)}em;">${key}: ${value}</span>`;
                     }
                     list.appendChild(listItem);
                 });
+
                 return list;
             }
 
-            function isObjectWithNoKeys(obj) {
-                return typeof obj === 'object' && obj !== null && Object.keys(obj).length === 0 && Object.values(obj).length > 0;
+            // Helper function to get different colors for different levels
+            function getColorForLevel(level) {
+                const colors = [
+                    '#4a2505', // Level 1 - Dark brown
+                    '#654321', // Level 2 - Medium brown
+                    '#8B4513', // Level 3 - Saddle brown
+                    '#A0522D', // Level 4 - Sienna
+                    '#B8860B'  // Level 5 - Dark goldenrod
+                ];
+                return colors[Math.min(level - 1, colors.length - 1)];
             }
 
 
@@ -679,6 +873,7 @@
                         player.style.backgroundImage = selectedCharacter.image;
                         player.style.backgroundSize = 'cover';
                         player.textContent = 'You';
+                        myPlayer = player;
                     } else {
                         let randomCard;
                         do {
@@ -765,6 +960,7 @@
                     actionButton.addEventListener('click', () => {
                         console.log(`Action chosen: ${action[0]}`);
                         addLogEntry(`User chose to ${action[1]}`, 'my-player');
+                        onPlayerAction(myPlayer);
                         fetch(`${urlPrefix}/api/v1/gameplay/round`, {
                             method: 'POST',
                             headers: {
@@ -785,22 +981,28 @@
                             const numberedActions = Object.entries(roundData.next_action).filter(([key, value]) => /^choice[_ ]\d+$/.test(key));
                             addActions(numberedActions); // Add new actions
                             if (roundData.history && roundData.history[roundNumber - 1]) {
-                                function extractDescriptions(obj) {
-                                    let descriptions = [];
+                                function extractDescriptions(obj, type='description') {
                                     for (const key in obj) {
                                         if (obj[key] && typeof obj[key] === 'object') {
-                                            descriptions = descriptions.concat(extractDescriptions(obj[key]));
+                                            extractDescriptions(obj[key], type);
                                         } else if (key === 'description') {
-                                            descriptions.push(obj[key]);
+                                            addLogEntry(obj[key], type === 'description' ? 'system' : 'event');
+                                        } else if (key === 'result') {
+                                            addLogEntry(obj[key], 'result');
+                                            if (obj['player'] & obj['player'] === selectedCharacter.name) {
+                                                gameEffects.addFlash(myPlayer);
+                                                if (obj[key].includes('success') || obj[key].includes('Success') || obj[key].includes('complete')) {
+                                                    gameEffects.showResourceChange(myPlayer, 'success');
+                                                } else if (obj[key].includes('fail') || obj[key].includes('Fail')) {
+                                                    gameEffects.showResourceChange(myPlayer, 'failure');
+                                                }
+                                            }
                                         }
                                     }
-                                    return descriptions;
                                 }
-
-                                const descriptions = extractDescriptions(roundData.history[roundNumber - 1]);
-                                descriptions.forEach(description => {
-                                    addLogEntry(description, 'system');
-                                });
+                                const history_data = roundData.history[roundNumber - 1]
+                                extractDescriptions(history_data.actions);
+                                extractDescriptions(history_data.events);
                             }
                             addLogEntry(`Round ${roundNumber} completed`, 'system');
                             console.log('Round number:', roundNumber);
