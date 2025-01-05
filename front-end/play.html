@@ -232,15 +232,16 @@
 
         /* Existing styles */
         .player-container {
-            position: relative;
             width: 80%;
             height: 50vh;
-<!--            background: url('./static/mappractice3.jpg') no-repeat center center;-->
+            background: url('./static/mappractice3.jpg') no-repeat center center;
             background-size: cover;
             border: 5px solid #fff;
-            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
-            padding: 20px;
+            transition: all 0.3s ease;
+<!--            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);-->
             border-radius: 16px;
+            padding: 20px;
+            position: relative;
             transition: all 0.3s ease;
         }
 
@@ -429,7 +430,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
-            color: #FFD700;
+            color: #FF0000;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
             opacity: 0;
             pointer-events: none;
@@ -505,6 +506,7 @@
             const characterSelect = document.getElementById('character-select');
             // Show character select initially
             characterSelect.style.display = 'flex';
+            const availableButtonIcons = ['🌟', '🌿', '♟️', '🎴', '💎', '🎳', '🎭', '🩸', '🏬', '🧙'];
             const playerPositions = {
                 2: [
                     { class: 'you', x: '40%', y: '70%' },
@@ -664,26 +666,31 @@
                 const playersCount = data.players.number_of_players;
                 const container = document.getElementById('player-container');
                 container.innerHTML = '';
+                const characterCards = document.querySelectorAll('.character-card');
+                const unselectedCards = Array.from(characterCards).filter(c => !c.classList.contains('selected'))
+                usedNames = new Set();
 
                 playerPositions[playersCount].forEach(pos => {
                     const player = document.createElement('div');
                     player.className = `player ${pos.class}`;
                     player.style.left = pos.x;
                     player.style.top = pos.y;
-                    usedImages = new Set();
                     if (pos.class === 'you') {
                         player.style.backgroundImage = selectedCharacter.image;
                         player.style.backgroundSize = 'cover';
                         player.textContent = 'You';
                     } else {
-                        let randomImage;
+                        let randomCard;
                         do {
-                            randomImage = images[Math.floor(Math.random() * images.length)];
-                        } while (usedImages.has(randomImage));
-                        console.log(randomImage);
-                        player.style.backgroundImage = `url("./static/player-icons/${randomImage}")`;
+                            randomCard = unselectedCards[Math.floor(Math.random() * unselectedCards.length)];
+                            randomCardName = randomCard.dataset.character,
+                            randomCardImage = randomCard.querySelector('.character-image').style.backgroundImage
+                        } while (usedNames.has(randomCardName));
+                        usedNames.add(randomCardName);
+                        console.log(randomCardImage)
+                        player.style.backgroundImage = randomCardImage;
                         player.style.backgroundSize = 'cover';
-                        player.textContent = pos.class.replace('ai', 'AI Player ');
+                        player.textContent = pos.class.replace('ai', `${randomCardName}: `);
                     }
                     container.appendChild(player);
                 });
@@ -710,29 +717,31 @@
 
             function handleRoundCompletion() {
                 const container = document.getElementById('player-container');
-                const roundComplete = document.createElement('div');
-
+                showRoundCompleteMessage();
                 // Add shake effect
                 container.classList.add('board-shake');
 
                 // Add glow effect
                 container.classList.add('board-glow');
 
-                // Show round complete message
-                roundComplete.className = 'round-complete';
-                roundComplete.textContent = 'Round Complete!';
-                document.body.appendChild(roundComplete);
 
-                // Add visible class after a short delay
-                setTimeout(() => {
-                   roundComplete.classList.add('visible');
-                }, 100);
-
-                // Remove effects and message
                 setTimeout(() => {
                   container.classList.remove('board-shake', 'board-glow');
-                  roundComplete.remove();
-                }, 1500);
+                }, 1000);
+            }
+
+            function showRoundCompleteMessage(message='Round Complete!', removeAfter=1000, input_color=null) {
+                const roundComplete = document.createElement('div');
+                roundComplete.className = 'round-complete';
+                roundComplete.textContent = message;
+                roundComplete.style.color = input_color || '#FFD700';
+                document.body.appendChild(roundComplete);
+                setTimeout(() => {
+                    roundComplete.classList.add('visible');
+                }, 100);
+                setTimeout(() => {
+                    roundComplete.remove();
+                }, removeAfter);
             }
 
             function addActions(actions) {
@@ -752,7 +761,7 @@
 
                     const actionButton = document.createElement('button');
                     actionButton.className = 'dice-button';
-                    actionButton.textContent = action[0];
+                    actionButton.textContent = availableButtonIcons[Math.floor(Math.random() * availableButtonIcons.length)];;
                     actionButton.addEventListener('click', () => {
                         console.log(`Action chosen: ${action[0]}`);
                         addLogEntry(`User chose to ${action[1]}`, 'my-player');
@@ -795,8 +804,15 @@
                             }
                             addLogEntry(`Round ${roundNumber} completed`, 'system');
                             console.log('Round number:', roundNumber);
-                            handleRoundCompletion();
-                            roundNumber++;
+                            if (roundNumber >= 5) {
+                                showRoundCompleteMessage(`Reaching Round Limit ${roundNumber}`, 2000, '#FF0000');
+                                setTimeout(() => {
+                                    location.reload(); // Restart the game
+                                }, 2000);
+                            } else {
+                                handleRoundCompletion();
+                                roundNumber++;
+                            }
                         })
                         .catch(err => {
                             console.error('Error during round:', err);
