@@ -235,10 +235,13 @@
             position: relative;
             width: 80%;
             height: 50vh;
-            background: url('./static/mappractice3.jpg') no-repeat center center;
+<!--            background: url('./static/mappractice3.jpg') no-repeat center center;-->
             background-size: cover;
             border: 5px solid #fff;
-            border-radius: 10px;
+            background: linear-gradient(135deg, #8B4513 0%, #654321 100%);
+            padding: 20px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
         }
 
         .player {
@@ -252,6 +255,23 @@
             font-size: 18px;
             background-color: rgba(0, 0, 0, 0.6);
             position: absolute;
+            transition: transform 0.3s ease;
+        }
+
+        .player-container::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        .player:hover {
+            transform: scale(1.1);
         }
 
         .center {
@@ -383,6 +403,41 @@
         .start-game-button:disabled {
             background-color: #95a5a6;
             cursor: not-allowed;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 1); }
+        }
+
+        .board-shake {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .board-glow {
+            animation: glow 1s ease-in-out;
+        }
+
+        .round-complete {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .round-complete.visible {
+            opacity: 1;
         }
 
     </style>
@@ -653,6 +708,33 @@
                 logContainer.scrollTop = logContainer.scrollHeight;
             }
 
+            function handleRoundCompletion() {
+                const container = document.getElementById('player-container');
+                const roundComplete = document.createElement('div');
+
+                // Add shake effect
+                container.classList.add('board-shake');
+
+                // Add glow effect
+                container.classList.add('board-glow');
+
+                // Show round complete message
+                roundComplete.className = 'round-complete';
+                roundComplete.textContent = 'Round Complete!';
+                document.body.appendChild(roundComplete);
+
+                // Add visible class after a short delay
+                setTimeout(() => {
+                   roundComplete.classList.add('visible');
+                }, 100);
+
+                // Remove effects and message
+                setTimeout(() => {
+                  container.classList.remove('board-shake', 'board-glow');
+                  roundComplete.remove();
+                }, 1500);
+            }
+
             function addActions(actions) {
                 const actionSection = document.getElementById('action-section');
                 console.log('Actions:', actions);
@@ -713,6 +795,7 @@
                             }
                             addLogEntry(`Round ${roundNumber} completed`, 'system');
                             console.log('Round number:', roundNumber);
+                            handleRoundCompletion();
                             roundNumber++;
                         })
                         .catch(err => {
