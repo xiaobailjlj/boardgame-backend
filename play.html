@@ -983,7 +983,7 @@
                             actionSection.innerHTML = ''; // Clear existing actions
                             const numberedActions = Object.entries(roundData.next_action).filter(([key, value]) => /^choice[_ ]\d+$/.test(key));
                             addActions(numberedActions); // Add new actions
-                            if (roundData.history && roundData.history[roundNumber - 1]) {
+                            if (roundData.history && roundData.history[roundData.history.length - 1]) {
                                 function extractDescriptions(obj, type='description') {
                                     for (const key in obj) {
                                         if (obj[key] && typeof obj[key] === 'object') {
@@ -1003,13 +1003,13 @@
                                         }
                                     }
                                 }
-                                const history_data = roundData.history[roundNumber - 1]
+                                const history_data = roundData.history[roundData.history.length - 1]
                                 extractDescriptions(history_data.actions);
                                 extractDescriptions(history_data.events);
                             }
                             addLogEntry(`Round ${roundNumber} completed`, 'system');
                             console.log('Round number:', roundNumber);
-                            if (roundNumber >= 5) {
+                            if (roundNumber >= 10) {
                                 showRoundCompleteMessage(`Reaching Round Limit ${roundNumber}`, 2000, '#FF0000');
                                 setTimeout(() => {
                                     location.reload(); // Restart the game
