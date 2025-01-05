@@ -860,6 +860,9 @@
                 const playersCount = data.players.number_of_players;
                 const container = document.getElementById('player-container');
                 container.innerHTML = '';
+                const backgrounds = ['mappractice0.jpg', 'mappractice1.jpg', 'mappractice2.jpg', 'mappractice3.jpg', 'mappractice4.jpg'];
+                const randomBackground = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+                container.style.backgroundImage = `url('./static/${randomBackground}')`;
                 const characterCards = document.querySelectorAll('.character-card');
                 const unselectedCards = Array.from(characterCards).filter(c => !c.classList.contains('selected'))
                 usedNames = new Set();
