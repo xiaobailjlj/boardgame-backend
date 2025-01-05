@@ -44,7 +44,7 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
     3. rules
     4. players, format: {player_format}
     
-    After generating the output, evaluate and validate:
+    After generating the output, evaluate and validate for self-check, but don't return the evaluate and validate result:
     1. Does the game follow the category features?
     2. Are the mechanics fully utilized with unique player actions?
     3. Does the background match the theme?
@@ -134,7 +134,7 @@ def follow_up(rule_id, file_path_follow, follow_instructions):
     3. rules
     4. players, format: {player_format}
     
-    After generating the output, evaluate and validate:
+    After generating the output, evaluate and validate for self-check, but don't return the evaluate and validate result:
     1. Is the output json format aligned with the provided example?
     '''
 
@@ -211,7 +211,7 @@ def start_game(rule_id, file_path_rule, player_role):
         choice 2: Move forward to the nearest food resource.
         choose: roll a dice or move forward
         
-    After generating the output, evaluate and validate:
+    After generating the output, evaluate and validate for self-check, but don't return the evaluate and validate result:
     1. Is the output json format aligned with the provided example?
     '''
 
@@ -317,7 +317,7 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     3. history, for instance: {history_example}
     4. next_action (a guide to the player's next action)
     
-    After generating the output, evaluate and validate:
+    After generating the output, evaluate and validate for self-check, but don't return the evaluate and validate result:
     1. Is the output json format aligned with the provided example?
     '''
 
