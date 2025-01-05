@@ -48,6 +48,7 @@ def init_boardgame(rule_id, number_of_players, game_duration, description_of_bac
     1. Does the game follow the category features?
     2. Are the mechanics fully utilized with unique player actions?
     3. Does the background match the theme?
+    4. Is the output json format aligned with the provided example?
     '''
 
 
@@ -132,6 +133,9 @@ def follow_up(rule_id, file_path_follow, follow_instructions):
     2. background
     3. rules
     4. players, format: {player_format}
+    
+    After generating the output, evaluate and validate:
+    1. Is the output json format aligned with the provided example?
     '''
 
     assistant_context_follow = f'''
@@ -206,6 +210,9 @@ def start_game(rule_id, file_path_rule, player_role):
         choice 1: Roll a dice to determine the starting food resource of the player.
         choice 2: Move forward to the nearest food resource.
         choose: roll a dice or move forward
+        
+    After generating the output, evaluate and validate:
+    1. Is the output json format aligned with the provided example?
     '''
 
     # assistant_context = '''
@@ -309,6 +316,9 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     2. player_role
     3. history, for instance: {history_example}
     4. next_action (a guide to the player's next action)
+    
+    After generating the output, evaluate and validate:
+    1. Is the output json format aligned with the provided example?
     '''
 
     assistant_context = json.dumps(game_history)
