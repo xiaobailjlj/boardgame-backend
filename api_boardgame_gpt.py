@@ -1,3 +1,4 @@
+import copy
 import json
 
 from openai import OpenAI
@@ -268,11 +269,22 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     with open(file_path_history) as json_data:
         game_history = json.load(json_data)
 
+    pure_history_all = game_history['history']
+    print(f"*** pure_history_all: {pure_history_all}")
+    pure_history_previous = []
+    for history in pure_history_all:
+        print (f"*** history: {history}")
+        if history['round'] == round_id-1:
+            pure_history_previous.append(history)
+
+    game_history_only_previous = copy.deepcopy(game_history)
+    game_history_only_previous['history'] = pure_history_previous
+
     print("********** next round **********")
 
     history_example = json.dumps([{"round": 1, "actions": [
         {"player": "Warrior", "action": "Move", "description": "Alice moved to the Jungle Clearing.", "cost": 1,
-         "result": "Success"}, {"player": "Explorer", "action": "Explore",
+         "result": "Fail"}, {"player": "Explorer", "action": "Explore",
                                 "description": "Bob explored an Ancient Ruin and found a treasure map.", "cost": 2,
                                 "result": "Success - Treasure Map acquired."},
         {"player": "Scholar", "action": "Rest", "description": "Carol rested to recover 2 health points.", "cost": 1,
@@ -286,7 +298,7 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
                                                             "result": "Critical Success - Hidden passage revealed!"},
                                                            {"player": "Explorer", "action": "Trade",
                                                             "description": "Bob traded the treasure map with Carol for a health potion.",
-                                                            "cost": 1, "result": "Success - Items exchanged."},
+                                                            "cost": 1, "result": "Fail"},
                                                            {"player": "Scholar", "action": "Engage",
                                                             "description": "Carol fought a Giant Spider in the cave.",
                                                             "cost": 3,
@@ -309,19 +321,19 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     {json.dumps(game_context)}
 
     The game history is:
-    {json.dumps(game_history)}
+    {json.dumps(game_history_only_previous)}
 
     Provide your output in json format with the keys, all keys in the json should be lowercase:
     1. name
     2. player_role
-    3. history, for instance: {history_example}
+    3. history, for instance: {history_example}, you can only return the history of this round
     4. next_action (a guide to the player's next action)
     
     After generating the output, evaluate and validate for self-check, but don't return the evaluate and validate result:
     1. Is the output json format aligned with the provided example?
     '''
 
-    assistant_context = json.dumps(game_history)
+    assistant_context = json.dumps(game_history_only_previous)
 
     message = [
         {
@@ -348,10 +360,17 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     print(f"*** response: \n {response_content_raw}")
     cleaned_content = response_content_raw.strip('```json').strip('```').strip()
     response_content = json.loads(cleaned_content)
+    pure_history_current = response_content['history']
+    for history in game_history['history']:
+        if history['round'] == round_id:
+            game_history['history'].remove(history)
+    for history in pure_history_current:
+        if history['round'] == round_id:
+            game_history['history'].append(history)
 
-    file_path_follow = file_path_history
-    with open(file_path_follow, 'w') as f:
-        json.dump(response_content, f)
+
+    with open(file_path_history, 'w') as f:
+        json.dump(game_history, f)
 
     return response_content
 
@@ -371,17 +390,20 @@ if __name__ == "__main__":
     # follow_instructions = 'Provide more detailed rules for dice.'
     # follow_content = follow_up(init_content, follow_instructions)
 
-    with open('return/board_game_name_Resource Wars: Plague Survivors_follow.json') as json_data:
-        game_context = json.load(json_data)
+    # with open('return/board_game_name_Resource Wars: Plague Survivors_follow.json') as json_data:
+    #     game_context = json.load(json_data)
 
     # player_role = "The Medic"
     # history = start_game(player_role, game_context)
 
-    with open('return/board_game_name_Resource Wars: Plague Survivors_history.json') as json_data:
-        game_history = json.load(json_data)
-    action = "roll the dice"
+    # with open('return/board_game_name_Resource Wars: Plague Survivors_history.json') as json_data:
+    #     game_history = json.load(json_data)
+    rule_id = 1736115427
+    action = "influence"
     round_id = 3
-    history = game_round(game_context, game_history, action, round_id)
+    file_path_rule = "return/board_game_id_1736115427_follow.json"
+    file_path_history = "return/board_game_id_1736115427_history.json"
+    history = game_round(rule_id, file_path_rule, file_path_history, round_id, action)
 
 
 
