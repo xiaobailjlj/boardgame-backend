@@ -1,3 +1,6 @@
+import logging
+import traceback
+
 from flask import Flask, request, jsonify
 from typing import Dict, List, Union, Optional
 import json
@@ -8,6 +11,9 @@ from api_boardgame_gpt import init_boardgame, follow_up, start_game, game_round
 app = Flask(__name__)
 from flask_cors import CORS
 CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 # Error handling
 @app.errorhandler(400)
@@ -152,34 +158,42 @@ def start_gameplay():
 
 @app.route('/api/v1/gameplay/round', methods=['POST'])
 def simulate_round():
-    """
-    Simulate a gameplay round.
-    Required fields:
-    - rule_id (int)
-    - player_role (str)
-    - round_id (int)
-    """
     try:
+        logger.debug("Received request data")
         data = request.get_json()
+        logger.debug(f"Request data: {data}")
+
         # Validate required fields
         required_fields = ['rule_id', 'action', 'round_id']
         for field in required_fields:
             if field not in data:
+                logger.error(f"Missing field: {field}")
                 return jsonify({'error': f'Missing required field: {field}'}), 400
+
+        logger.debug("Passed field validation")
 
         # Type validation
         if not isinstance(data['rule_id'], int):
+            logger.error("Invalid rule_id type")
             return jsonify({'error': 'rule_id must be an integer'}), 400
         if not isinstance(data['round_id'], int):
+            logger.error("Invalid round_id type")
             return jsonify({'error': 'round_id must be an integer'}), 400
+
+        logger.debug("Passed type validation")
 
         # Implementation
         rule_id = data['rule_id']
         round_id = data['round_id']
         action = data['action']
+
         file_path_rule = "return/board_game_id_" + str(rule_id) + "_follow.json"
         file_path_history = "return/board_game_id_" + str(rule_id) + "_history.json"
+
+        logger.debug(f"Attempting to read files: {file_path_rule}, {file_path_history}")
+
         round_content = game_round(rule_id, file_path_rule, file_path_history, round_id, action)
+        logger.debug(f"game_round returned: {round_content}")
 
         return jsonify({
             "rule_id": rule_id,
@@ -190,7 +204,12 @@ def simulate_round():
         })
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Error occurred: {str(e)}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return jsonify({
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
 
 
 if __name__ == '__main__':
