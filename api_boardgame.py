@@ -79,7 +79,12 @@ def generate_rules():
         })
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Error occurred: {str(e)}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return jsonify({
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
 
 
 @app.route('/api/v1/rules/optimize', methods=['POST'])
@@ -117,7 +122,12 @@ def optimize_rules():
         })
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Error occurred: {str(e)}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return jsonify({
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
 
 
 @app.route('/api/v1/gameplay/start', methods=['POST'])
@@ -153,7 +163,12 @@ def start_gameplay():
         })
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        logger.error(f"Error occurred: {str(e)}")
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return jsonify({
+            'error': str(e),
+            'traceback': traceback.format_exc()
+        }), 500
 
 
 @app.route('/api/v1/gameplay/round', methods=['POST'])

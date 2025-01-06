@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="stylesheet" type="text/css" href="static/loading.css"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Selector</title>
@@ -13,7 +14,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: url('./static/table.jpg') no-repeat center center/cover;
+            background: url('./static/playbg.jpeg') no-repeat center center/cover;
         }
         .container {
             background: #fff;
@@ -118,6 +119,17 @@
             <button type="submit">Generate Games</button>
         </form>
     </div>
+    <div class="loading-container" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+            Processing
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.getElementById('game-form').addEventListener('submit', function(e) {
@@ -135,6 +147,7 @@
                 alert('Please fill out all fields.');
                 return;
             }
+            showLoading();
             fetch(urlPrefix + '/api/v1/rules/generate', {
                 method: 'POST',
                 headers: {
@@ -150,9 +163,11 @@
             })
             .then(response => response.json())
             .then(data => {
+                hideLoading();
                 window.location.href = `play.html?data=${encodeURIComponent(JSON.stringify(data))}`;
             })
             .catch(error => {
+                hideLoading();
                 console.error('Error:', error);
             });
 
@@ -168,6 +183,13 @@
             const selectedOptions = Array.from(document.querySelectorAll('.mechanic-option.selected'))
                 .map(button => button.textContent);
             document.getElementById('selected-mechanics').innerText = `Selected Mechanics: ${selectedOptions.join(', ')}`;
+        }
+        function showLoading() {
+            document.getElementById('loadingIndicator').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
         }
     </script>
 </body>

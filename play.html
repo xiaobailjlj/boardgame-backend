@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" type="text/css" href="static/loading.css"/>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Play</title>
@@ -603,6 +604,17 @@
         </div>
     </div>
     <div id="effect-container" class="effect-container"></div>
+    <div class="loading-container" id="loadingIndicator">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+            Processing
+            <div class="loading-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -643,7 +655,8 @@
                     { class: 'ai4', x: '80%', y: '0%' }
                 ]
             };
-            const images = ['assassin.png', 'barbarian.png', 'character.png', 'druid.png', 'king.png', 'magician.png', 'ninja.png', 'robin-hood.png', 'swordsman.png', 'wizard.png'];
+            const images = ['assassin.png', 'barbarian.png', 'character.png', 'druid.png', 'king.png', 'magician.png', 'ninja.png',
+            'robin-hood.png', 'swordsman.png', 'wizard.png', 'adventurer.png', 'alchemy.png', 'character_1.png', 'character_2.png', 'monk.png', 'swords.png'];
             const characterGrid = document.getElementById('character-grid');
 
             function createCharacterCard(character) {
@@ -971,6 +984,7 @@
                         console.log(`Action chosen: ${action[0]}`);
                         addLogEntry(`User chose to ${action[1]}`, 'my-player');
                         onPlayerAction(myPlayer);
+                        showLoading();
                         fetch(`${urlPrefix}/api/v1/gameplay/round`, {
                             method: 'POST',
                             headers: {
@@ -985,6 +999,7 @@
                         })
                         .then(response => response.json())
                         .then(roundData => {
+                            hideLoading();
                             console.log('Round data:', roundData);
                             const actionSection = document.getElementById('action-section');
                             actionSection.innerHTML = ''; // Clear existing actions
@@ -1027,6 +1042,7 @@
                             }
                         })
                         .catch(err => {
+                            hideLoading();
                             console.error('Error during round:', err);
                         });
                     });
@@ -1083,6 +1099,7 @@
             document.getElementById('update-rules').addEventListener('click', () => {
                 if (newRule.value.trim() !== '') {
                     const newRuleData = newRule.value.trim();
+                    showLoading();
                     fetch(urlPrefix + '/api/v1/rules/optimize', {
                         method: 'POST',
                         headers: {
@@ -1092,11 +1109,13 @@
                     })
                     .then(response => response.json())
                     .then(updatedData => {
+                        hideLoading();
                         updateRuleContent(updatedData);
                         newRule.value = '';
                         alert('Rules updated successfully!');
                     })
                     .catch(err => {
+                        hideLoading();
                         console.error(err);
                         alert('An error occurred while updating the rules.');
                     });
@@ -1104,6 +1123,13 @@
             });
             updateContent(data);
         });
+        function showLoading() {
+            document.getElementById('loadingIndicator').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
     </script>
 </body>
 </html>
