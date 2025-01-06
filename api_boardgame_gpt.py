@@ -208,9 +208,9 @@ def start_game(rule_id, file_path_rule, player_role):
     3. history (now it's empty)
     4. next_action (a guide to the player's first action)
         for instance:
-        choice 1: Roll a dice to determine the starting food resource of the player.
+        choice 1: Roll a D20 dice to determine the starting food resource of the player.
         choice 2: Move forward to the nearest food resource.
-        choose: roll a dice or move forward
+        choose: roll a D20 dice or move forward
         
     After generating the output, evaluate and validate for self-check, but don't return the evaluate and validate result:
     1. Is the output json format aligned with the provided example?
