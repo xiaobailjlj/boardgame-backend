@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=MedievalSharp&family=Pirata+One&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="static/loading.css"/>
     <script src="static/common.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Play</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=MedievalSharp&family=Pirata+One&family=Playfair+Display:ital@1&display=swap');
         body {
             margin: 0;
             padding: 0;
@@ -552,10 +554,133 @@
         .round-complete.visible {
             opacity: 1;
         }
+        .game-title-wrapper {
+            position: absolute;
+            left: 400px; /* Width of the left sidebar */
+            right: 400px; /* Width of the right sidebar */
+            top: 0;
+            z-index: 10;
+        }
+
+
+        .game-title-container {
+            width: 100%;
+            text-align: center;
+            padding: 1rem 0;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(to bottom, rgba(44, 62, 80, 0.9), rgba(44, 62, 80, 0));
+        }
+
+        .game-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .main-title {
+            font-size: 2.0rem;
+            color: white;
+            margin: 0;
+            padding: 0.4rem 1.5rem;
+            position: relative;
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(255, 255, 255, 0.2);
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            border-bottom: 4px double rgba(255, 255, 255, 0.3);
+            letter-spacing: 4px;
+        }
+
+        .title-decorations {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .dice, .cards {
+            position: absolute;
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .dice {
+            top: -10px;
+            right: -20px;
+            animation-delay: 0.5s;
+        }
+
+        .cards {
+            bottom: -10px;
+            left: -20px;
+            animation-delay: 1s;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 0.4rem;
+            font-style: italic;
+            animation: subtitlePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.5),
+                0 0 20px rgba(255, 255, 255, 0.3),
+                0 0 30px rgba(255, 255, 255, 0.2);
+            }
+            100% {
+                text-shadow:
+                0 0 15px rgba(255, 255, 255, 0.7),
+                0 0 25px rgba(255, 255, 255, 0.5),
+                0 0 35px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes subtitlePulse {
+            0%, 100% {
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .main-title:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
 
     </style>
 </head>
 <body>
+    <div class="game-title-wrapper">
+        <div class="game-title-container">
+            <div class="game-title">
+                <h1 class="main-title">Mystical Realms</h1>
+                <div class="title-decorations">
+                    <span class="dice">🎲</span>
+                    <span class="cards">🌀</span>
+                </div>
+                <div class="subtitle">A Tale of Strategy & Fortune</div>
+            </div>
+        </div>
+    </div>
     <div class="rules-sidebar">
         <div class="book-container">
             <div class="book-page-edge"></div>
@@ -620,8 +745,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
-<!--            const urlPrefix = 'http://localhost:5000';-->
             const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+            const fontArray = ['Cinzel', 'MedievalSharp', 'Pirata One', 'Playfair Display'];
+
+            let currentIndex = 0;
+
+            const randomIndex = Math.floor(Math.random() * fontArray.length);
+            const mainTitle = document.querySelector('.main-title');
+            const subtitle = document.querySelector('.subtitle');
+
+            mainTitle.style.fontFamily = fontArray[randomIndex];
+            mainTitle.textContent = data.name;
+            subtitle.textContent = 'your journey begins...';
             let selectedCharacter = null;
             let myPlayer = null;
             let roundNumber = 1;
@@ -631,7 +766,7 @@
             const characterSelect = document.getElementById('character-select');
             // Show character select initially
             characterSelect.style.display = 'flex';
-            const availableButtonIcons = ['🌟', '🌿', '♟️', '🎴', '💎', '🎳', '🎭', '🩸', '🏬', '🧙'];
+            const availableButtonIcons = ['🌟', '🌿', '♟️', '🎴', '💎', '🎳', '🎭', '🩸', '🏬', '🧙', '🪙', '🎨'];
             const playerPositions = {
                 2: [
                     { class: 'you', x: '40%', y: '70%' },
@@ -1083,7 +1218,7 @@
                         console.log('Game started:', startData);
                         const numberedActions = Object.entries(startData.next_action).filter(([key, value]) => /^choice[_ ]\d+$/.test(key));
                         document.getElementById('dynamic-title').textContent = `You are ${selectedCharacter.name}`;
-                        document.getElementById('dynamic-message').textContent = startData.next_action.choose + '🎲';
+                        document.getElementById('dynamic-message').textContent = startData.next_action.choose + '⏳';
                         addActions(numberedActions);
                         addLogEntry('Game started', 'system');
                         addLogEntry('Welcome to the adventure!', 'system');
