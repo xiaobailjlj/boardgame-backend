@@ -5,12 +5,14 @@ from flask import Flask, request, jsonify
 from typing import Dict, List, Union, Optional
 import json
 import datetime
+from flask_cors import CORS
 
 from api_boardgame_gpt import init_boardgame, follow_up, start_game, game_round
 
 app = Flask(__name__)
-from flask_cors import CORS
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=True)
+CORS(app, resources={r"/api/*": {"origins": "*"}}, methods=['POST', 'OPTIONS'])
+
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -33,7 +35,7 @@ def not_found(error):
 
 
 # API endpoints
-@app.route('/api/v1/rules/generate', methods=['POST'])
+@app.route('/api/v1/rules/generate', methods=['POST', 'OPTIONS'])
 def generate_rules():
     """
     Generate game rules based on input parameters.
@@ -44,6 +46,8 @@ def generate_rules():
     - game_category (str)
     - game_mechanics (list)
     """
+    if request.method == 'OPTIONS':
+        return '', 204  # Respond to the OPTIONS request
     try:
         data = request.get_json()
         # Validate required fields
@@ -228,4 +232,4 @@ def simulate_round():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='localhost', port=5003)
