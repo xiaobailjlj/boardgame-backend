@@ -21,14 +21,14 @@ The backend is implemented in api_boardgame.py. You can run the backend server u
 ```bash
 python api_boardgame.py
 ```
-This will start a local server (usually at http://127.0.0.1:5000/) where the backend API will be running. The API will handle requests from the frontend and interact with the game generation logic.
+This will start a local server (at http://127.0.0.1:5000/) where the backend API will be running. The API will handle requests from the frontend and interact with the game generation logic.
 
 ### 3. Running the Frontend
-The backend is implemented in api_boardgame.py. You can run the backend server using Python.
+The frontend is a simple HTML page that interacts with the backend API. To run it, you can
 ```bash
-open play.html
+aaa
 ```
-Then navigate to http://localhost:8000/play.html to access the frontend interface.
+Then navigate to *** to access the frontend interface.
 
 ### Security Notice
 Do not expose the key.py file publicly. It contains your GPT API key, and sharing it could lead to unauthorized access to your OpenAI account. Please handle it securely and store it in a private location.
