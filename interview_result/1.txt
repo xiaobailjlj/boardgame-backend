@@ -1,0 +1,31 @@
+User Guide:
+mark: the wating time for each step could take up to 5 seconds
+
+Example:
+Initial Page:
+Select number of players: 4
+Play time: 30
+Game type: Adventure
+Mechanics: Card game
+Background Description: Mid-century Europe
+
+Player Page:
+You can provide instructions to further modify the rules and polish the story telling
+Choose your characher and start the game
+
+Please answer the following questions:
+Did you find the AI-generated content engaging and playable?
+Yes, from the game log I can see clear dynamic actions flow
+How well did the AI follow general board game rules (e.g., fairness, balance)?
+I think it generated well with fairness and balance, the improvement and failure is well-distributed. The outcome is quite logical.
+Does the AI provided useful suggestions and does it met your creative needs?
+Yes, it does. The storytelling part and role-specific interactions enhanced creativity and made the game quite unique.
+When does the AI fell short or produced invalid outputs?
+Sometimes it lacked context on players' strategic reasoning behind actions, and the indication to win condition is not so clear.
+Please give a number for the following questions:
+Task Completion Time: Measure how long it takes for participants to create a playable game concept using the AI system.
+25min
+Accuracy of Rule Compliance Scores: Please assess the generated game elements for rule adherence and playability. Give score from 1(very poor)-10(excellent).
+9/10
+Creativity Scores: Please assess the creativity of the AI-generated game concepts, such as novelty, fun factor, and coherence. Give score from 1(very poor)-10(excellent)
+8/10

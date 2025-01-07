@@ -1,0 +1,34 @@
+User Guide:
+mark: the wating time for each step could take up to 5 seconds
+
+Example:
+Initial Page:
+Select number of players: 5
+Play time: 30
+Game type: economic
+Mechanics: Progression and Development; Resource and Area Management
+Background Description: people with different background try to make great fortune during wartime.
+
+Player Page:
+You can provide instructions to further modify the rules and polish the story telling
+Choose your characher and start the game
+
+Please answer the following questions:
+Did you find the AI-generated content engaging and playable?
+Yes, it appears engaging and playable. The mechanics are clear and offer a mix of strategy (resource management, area control) and player interaction (negotiation, trading). The dynamic market pricing and character abilities add depth.
+
+How well did the AI follow general board game rules (e.g., fairness, balance)?
+It was well.
+The mechanics are consistent, and fairness is maintained through clear requirements for actions (e.g., trading, worker placement). However, not sure if any character ability or strategy disproportionately affects outcomes.
+
+Does the AI provided useful suggestions and does it met your creative needs?
+The rules for resolving deadlocks in negotiations are unclear. The resource price fluctuations seems realistic but the price stabilize sometimes too quick.
+When does the AI fell short or produced invalid outputs?
+
+Please give a number for the following questions:
+Task Completion Time: Measure how long it takes for participants to create a playable game concept using the AI system.
+mostly act with 30 seconds.
+Accuracy of Rule Compliance Scores: Please assess the generated game elements for rule adherence and playability. Give score from 1(very poor)-10(excellent).
+9\10
+Creativity Scores: Please assess the creativity of the AI-generated game concepts, such as novelty, fun factor, and coherence. Give score from 1(very poor)-10(excellent)
+8\10

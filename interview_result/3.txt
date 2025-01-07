@@ -1,0 +1,14 @@
+Did you find the AI-generated content engaging and playable?
+i think the background is interesting and playable at the same time because there is a lot of randomness in this game
+How well did the AI follow general board game rules (e.g., fairness, balance)?
+the balance is also good because it takes me more than 10 minutes to finish the game and randomly drawing points ensures continuity and fairness
+Does the AI provided useful suggestions and does it met your creative needs?
+the suggestions themselves feel less effective than your own musings
+When does the AI fell short or produced invalid outputs?
+haven't encountered many ineffective output situations
+
+Please give a number for the following questions:
+Task Completion Time: Measure how long it takes for participants to create a playable game concept using the AI system.
+15 min
+Accuracy of Rule Compliance Scores: Please assess the generated game elements for rule adherence and playability. Give score from 1(very poor)-10(excellent).8
+Creativity Scores: Please assess the creativity of the AI-generated game concepts, such as novelty, fun factor, and coherence. Give score from 1(very poor)-10(excellent)8

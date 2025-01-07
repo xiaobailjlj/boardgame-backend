@@ -362,7 +362,7 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     response_content = json.loads(cleaned_content)
     pure_history_current = response_content['history']
     for history in game_history['history']:
-        if history['round'] == round_id:
+        if history['round'] == round_id and round != 1:
             game_history['history'].remove(history)
     for history in pure_history_current:
         if history['round'] == round_id:

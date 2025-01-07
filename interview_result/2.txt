@@ -1,0 +1,22 @@
+Please answer the following questions:
+Did you find the AI-generated content engaging and playable?
+Yes.
+
+How well did the AI follow general board game rules (e.g., fairness, balance)?
+Barely followed the rules it set.
+
+Does the AI provided useful suggestions and does it met your creative needs?
+Yes it is very flexible to add rules at any time, more flexible than a human DM.
+
+When does the AI fell short or produced invalid outputs?
+AI player's action is not always logical.
+
+Please give a number for the following questions:
+Task Completion Time: Measure how long it takes for participants to create a playable game concept using the AI system.
+20min.
+
+Accuracy of Rule Compliance Scores: Please assess the generated game elements for rule adherence and playability. Give score from 1(very poor)-10(excellent).
+6
+
+Creativity Scores: Please assess the creativity of the AI-generated game concepts, such as novelty, fun factor, and coherence. Give score from 1(very poor)-10(excellent)
+8
