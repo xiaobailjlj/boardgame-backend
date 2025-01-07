@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" type="text/css" href="static/loading.css"/>
+    <script src="static/common.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Play</title>
@@ -619,7 +620,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const urlPrefix = 'https://5452-80-114-20-42.ngrok-free.app';
+<!--            const urlPrefix = 'http://localhost:5000';-->
             const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
             let selectedCharacter = null;
             let myPlayer = null;
@@ -767,7 +768,6 @@
             function onPlayerAction(actionElement) {
                 gameEffects.addBounce(actionElement);
                 const rect = actionElement.getBoundingClientRect();
-<!--                gameEffects.showFloatingText('Action Used!', rect.left, rect.top);-->
             }
 
 
@@ -984,7 +984,7 @@
                         console.log(`Action chosen: ${action[0]}`);
                         addLogEntry(`User chose to ${action[1]}`, 'my-player');
                         onPlayerAction(myPlayer);
-                        showLoading();
+                        showLoading(document);
                         fetch(`${urlPrefix}/api/v1/gameplay/round`, {
                             method: 'POST',
                             headers: {
@@ -999,7 +999,7 @@
                         })
                         .then(response => response.json())
                         .then(roundData => {
-                            hideLoading();
+                            hideLoading(document);
                             console.log('Round data:', roundData);
                             const actionSection = document.getElementById('action-section');
                             actionSection.innerHTML = ''; // Clear existing actions
@@ -1042,7 +1042,7 @@
                             }
                         })
                         .catch(err => {
-                            hideLoading();
+                            hideLoading(document);
                             console.error('Error during round:', err);
                         });
                     });
@@ -1099,7 +1099,7 @@
             document.getElementById('update-rules').addEventListener('click', () => {
                 if (newRule.value.trim() !== '') {
                     const newRuleData = newRule.value.trim();
-                    showLoading();
+                    showLoading(document);
                     fetch(urlPrefix + '/api/v1/rules/optimize', {
                         method: 'POST',
                         headers: {
@@ -1109,13 +1109,13 @@
                     })
                     .then(response => response.json())
                     .then(updatedData => {
-                        hideLoading();
+                        hideLoading(document);
                         updateRuleContent(updatedData);
                         newRule.value = '';
                         alert('Rules updated successfully!');
                     })
                     .catch(err => {
-                        hideLoading();
+                        hideLoading(document);
                         console.error(err);
                         alert('An error occurred while updating the rules.');
                     });
@@ -1123,13 +1123,6 @@
             });
             updateContent(data);
         });
-        function showLoading() {
-            document.getElementById('loadingIndicator').style.display = 'flex';
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingIndicator').style.display = 'none';
-        }
     </script>
 </body>
 </html>

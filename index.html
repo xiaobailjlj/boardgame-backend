@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="static/loading.css"/>
+    <script src="static/common.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game Selector</title>
@@ -134,9 +135,6 @@
     <script>
         document.getElementById('game-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            const urlPrefix = 'https://5452-80-114-20-42.ngrok-free.app';
-
             const minPlayers = document.getElementById('players').value;
             const time = document.getElementById('time').value;
             const type = document.getElementById('type').value;
@@ -147,7 +145,7 @@
                 alert('Please fill out all fields.');
                 return;
             }
-            showLoading();
+            showLoading(document);
             fetch(urlPrefix + '/api/v1/rules/generate', {
                 method: 'POST',
                 headers: {
@@ -163,11 +161,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                hideLoading();
+                hideLoading(document);
                 window.location.href = `play.html?data=${encodeURIComponent(JSON.stringify(data))}`;
             })
             .catch(error => {
-                hideLoading();
+                hideLoading(document);
                 console.error('Error:', error);
             });
 
@@ -183,13 +181,6 @@
             const selectedOptions = Array.from(document.querySelectorAll('.mechanic-option.selected'))
                 .map(button => button.textContent);
             document.getElementById('selected-mechanics').innerText = `Selected Mechanics: ${selectedOptions.join(', ')}`;
-        }
-        function showLoading() {
-            document.getElementById('loadingIndicator').style.display = 'flex';
-        }
-
-        function hideLoading() {
-            document.getElementById('loadingIndicator').style.display = 'none';
         }
     </script>
 </body>
