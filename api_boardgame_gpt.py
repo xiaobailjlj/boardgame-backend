@@ -205,7 +205,7 @@ def start_game(rule_id, file_path_rule, player_role):
     Provide your output in json format with the keys, all keys in the json should be lowercase:
     1. name
     2. player_role
-    3. history (now it's empty)
+    3. history (now it's empty:[])
     4. next_action (a guide to the player's first action)
         for instance:
         choice 1: Roll a D20 dice to determine the starting food resource of the player.
@@ -216,18 +216,18 @@ def start_game(rule_id, file_path_rule, player_role):
     1. Is the output json format aligned with the provided example?
     '''
 
-    # assistant_context = '''
-    # 1. name
-    #
-    # 2. player_role
-    #
-    # 3. history: []
-    #
-    # 4. next_action: (just an example)
-    # choice 1: Roll a dice to determine the starting food resource of the player.
-    # choice 2: Move forward to the nearest food resource.
-    # choose: roll a dice or move forward
-    # '''
+    assistant_context = '''
+    1. name
+
+    2. player_role
+
+    3. history: []
+
+    4. next_action: (just an example)
+    choice 1: Roll a D20 dice to determine the starting food resource of the player.
+    choice 2: Move forward to the nearest food resource.
+    choose: roll a dice or move forward
+    '''
 
     message = [
         {
@@ -238,10 +238,10 @@ def start_game(rule_id, file_path_rule, player_role):
             "role": "user",
             "content": player_role
         },
-        # {
-        #     "role": "assistant",
-        #     "content": assistant_context
-        # }
+        {
+            "role": "assistant",
+            "content": assistant_context
+        }
     ]
     print(f"*** message: \n {message}")
 
@@ -364,10 +364,12 @@ def game_round(rule_id, file_path_rule, file_path_history, round_id, action):
     for history in game_history['history']:
         if history['round'] == round_id and round != 1:
             game_history['history'].remove(history)
-    for history in pure_history_current:
-        if history['round'] == round_id:
-            game_history['history'].append(history)
-
+    if round_id == 1:
+        game_history['history'] = pure_history_current
+    else:
+        for history in pure_history_current:
+            if history['round'] == round_id:
+                game_history['history'].append(history)
 
     with open(file_path_history, 'w') as f:
         json.dump(game_history, f)
