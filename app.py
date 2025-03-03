@@ -1,15 +1,12 @@
 import logging
 import traceback
-import yaml
-import os
-
 from flask import Flask, request, jsonify
-from typing import Dict, List, Union, Optional
-import json
 import datetime
 from flask_cors import CORS
-
+import yaml
+import os
 from api_boardgame_gpt import init_boardgame, follow_up, start_game, game_round
+
 
 # Load configuration from YAML file
 def load_config(config_file='config.yaml'):
@@ -19,9 +16,9 @@ def load_config(config_file='config.yaml'):
 
 # Initialize application with configuration
 config = load_config()
-app = Flask(__name__)
 
 # Configure CORS from config
+app = Flask(__name__)
 CORS(app,
      resources=config['cors']['resources'],
      methods=config['cors']['methods'])
@@ -29,6 +26,7 @@ CORS(app,
 # Configure logging from config
 logging.basicConfig(level=getattr(logging, config['logging']['level']))
 logger = logging.getLogger(__name__)
+
 
 # Error handling
 @app.errorhandler(400)
@@ -234,7 +232,6 @@ def simulate_round():
             "history": round_content['history'],
             "next_action": round_content['next_action']
         })
-
     except Exception as e:
         logger.error(f"Error occurred: {str(e)}")
         logger.error(f"Traceback: {traceback.format_exc()}")
@@ -242,7 +239,6 @@ def simulate_round():
             'error': str(e),
             'traceback': traceback.format_exc()
         }), 500
-
 
 if __name__ == '__main__':
     server_config = config['server']
