@@ -1,0 +1,15 @@
+server:
+  host: 'localhost'
+  port: 9001
+  debug: true
+
+cors:
+  resources:
+    "/api/*":
+      origins: "*"
+  methods:
+    - 'POST'
+    - 'OPTIONS'
+
+logging:
+  level: 'DEBUG'
