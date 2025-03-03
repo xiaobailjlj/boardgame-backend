@@ -1,5 +1,5 @@
 {
-  "territory_building": {
+  "territory building": {
     "features": [
       "Players claim or develop areas.",
       "Interaction between players often revolves around resources or dominance."
@@ -34,7 +34,7 @@
       "Focus on trade, market dynamics, and financial growth."
     ]
   },
-  "farming_industry_manufacturing": {
+  "farming industry manufacturing": {
     "features": [
       "Players grow, produce, or refine resources.",
       "Often tied to worker placement or production chains."
